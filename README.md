@@ -2,8 +2,8 @@
 
 Пихание объектов на полотно, начиная с угла
 пример результата программы: 
-![Picture](bags/main_image.png)
-![Picture](bags/main_image1.png)
+![Picture](bugs/main_image.png)
+![Picture](bugs/main_image1.png)
  
  Код:
 
