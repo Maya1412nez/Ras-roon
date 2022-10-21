@@ -181,5 +181,18 @@ elif x_or_y < 0:
     else:
         x_or_y = 2  # Now we can't move on x
 ```
-
 # Заметки
+### Recounting alg:
+```py
+if its overlaying:
+    u = count pix for moving up
+    l = count pix for moving left
+    r = count pix for moving right
+    if u is min:
+        move up
+    if l is min:
+        move light
+    if r is min:
+        move right
+```
+
