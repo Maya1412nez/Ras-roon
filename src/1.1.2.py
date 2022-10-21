@@ -193,12 +193,3 @@ for t in range(quality):
     datas = over_image.get_data()
     main_image.add_images(datas)
 main_image.save_rez()
-
-
-def create_matrix(self):
-    # check pixels, matrix
-    for i in range(self.height):
-        for j in range(self.width):
-            r, g, b, a = self.pixels[j, i]
-            if a != 0:  # if pix != None
-                self.matrix[i][j] = 1  # замена 0 на 1
