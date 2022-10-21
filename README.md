@@ -183,7 +183,7 @@ elif x_or_y < 0:
 ```
 # Заметки
 ### Recounting alg:
-```py
+```
 if its overlaying:
     u = count pix for moving up
     l = count pix for moving left
