@@ -164,7 +164,7 @@ def add_images(self, data):
 ![Picture](Doc/bugs/main_image1.png)
  
  ### Код:
-```
+```py
  if x_or_y > 0:
     if x_or_y == 1:  # if x_or_y still not constant
         x_or_y = -1  # the next shift in x
