@@ -150,7 +150,7 @@ def add_images(self, data):
 > По завершению работы цикла программа выводит получившееся изображение, в котором количество фигур = максимально допустимому, определенном в начале:
 > 
 
-#картинка
+>#картинка
 
 # **Вывод**
 
@@ -160,8 +160,8 @@ def add_images(self, data):
 
 Пихание объектов на полотно, начиная с угла
 пример результата программы: 
-![Picture](Doc/bugs/main_image.png)
-![Picture](Doc/bugs/main_image1.png)
+![Picture](Doc/bugs/stair/main_image.png)
+![Picture](Doc/bugs/stair/main_image1.png)
  
  ### Код:
 ```py
@@ -196,3 +196,9 @@ if its overlaying:
         move right
 ```
 
+# Баги
+## Matrix creating, logical
+![Matix](Doc/bugs/martix_logic1/main_image_from_1.1.1.png)
+Matrix:
+![Matix](Doc/bugs/martix_logic1/main_image_1.1.1.png)
+![Matix](Doc/bugs/martix_logic1/main_image_1.1.1_noticed.png)

@@ -64,7 +64,7 @@ class MainImage:
         print('DONE!', "Fails =", fail_count)
 
     def save_rez(self):
-        self.main_image.save('rezs/main_image.png')
+        self.main_image.save('rezs/main_image_from_1.1.2.png')
         print(*self.main_matrix, sep='\n')
 
 
