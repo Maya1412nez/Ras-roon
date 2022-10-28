@@ -1,9 +1,9 @@
 import copy
 from random import randint, choice
-
+import time
 from PIL import Image
 
-
+file = open('rezult_1.1.1.txt', encoding='utf-8')
 class MainImage:
     def __init__(self, width, height):
         self.main_width = width
@@ -48,9 +48,13 @@ class MainImage:
 
         print('DONE!')
 
+        # self.main_image.show()
+        # print(*self.main_matrix, sep='\n')
+        # time.sleep(3)
+
     def save_rez(self):
         self.main_image.save('rezs/main_image_from_1.1.1.png')
-        print(*self.main_matrix, sep='\n')
+        #print(*self.main_matrix, sep='\n')
 
 
 class OverlayImage:
@@ -160,7 +164,7 @@ class OverlayImage:
 
 w, h = 500, 300
 quality = 40
-name = 'image/Image.png'
+name = 'image/dog.png'
 
 main_image = MainImage(w, h)
 
