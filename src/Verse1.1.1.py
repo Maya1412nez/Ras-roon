@@ -1,9 +1,10 @@
+# -*- coding: utf-8 -*-
 import copy
 from random import randint, choice
 import time
 from PIL import Image
 
-file = open('rezult_1.1.1.txt', encoding='utf-8')
+
 class MainImage:
     def __init__(self, width, height):
         self.main_width = width
@@ -12,9 +13,8 @@ class MainImage:
         self.main_demo_image = Image.new('RGB', (self.main_width, self.main_height), (118, 255, 97))
         self.main_matrix = [[0 for _ in range(self.main_width)] for __ in range(self.main_height)]
 
-    def add_images(self, data):
-        print(data)
-        overlaying_image = Image.open('rezs/ready_image.png')
+    def add_images(self, data):  
+        overlaying_image = Image.open('src/rezs/ready_image.png')
         x, y, over_matrix = data
         ov_im_width, ov_im_height = overlaying_image.size
         good_height = False
@@ -53,8 +53,13 @@ class MainImage:
         # time.sleep(3)
 
     def save_rez(self):
-        self.main_image.save('rezs/main_image_from_1.1.1.png')
-        #print(*self.main_matrix, sep='\n')
+        self.main_image.save('src/rezs/main_image_from_1.1.1.png')
+        # print(*self.main_matrix, sep='\n')
+        file = open('src/rezult_1.1.1.txt', 'w', encoding='utf-8')
+        for row in self.main_matrix:
+            file.write(str(row))
+            file.write('\n')
+        
 
 
 class OverlayImage:
@@ -126,8 +131,8 @@ class OverlayImage:
         print(f'''Possible quality: {possible_quality}''')
 
     def save_rez(self):
-        self.image.save('rezs/image.png')
-        self.demo_image.save('rezs/demo_image.png')
+        self.image.save('src/rezs/image.png')
+        self.demo_image.save('src/rezs/demo_image.png')
 
     def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
@@ -158,13 +163,13 @@ class OverlayImage:
 
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
-        self.image.save('rezs/ready_image.png')
+        self.image.save('src/rezs/ready_image.png')
         return self.x, self.y, self.matrix
 
 
 w, h = 500, 300
 quality = 40
-name = 'image/dog.png'
+name = 'src/image/dog.png'
 
 main_image = MainImage(w, h)
 
