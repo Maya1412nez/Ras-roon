@@ -24,14 +24,18 @@ class MainImage:
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
             overlay = False
+            over_matrix[0][0] = 'A' # helping marks
+            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z' # helping marks
             for i in range(self.main_height):
                 for j in range(self.main_width):
                     # ENTER
                     small_i = i - y
                     small_j = j - x
+                    # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
-                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
-                            self.main_matrix[i][j] = over_matrix[small_i][small_j]
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+                            if self.main_matrix[i][j] == 0:
+                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
 
                         else:
                             overlay = True
@@ -167,7 +171,7 @@ class OverlayImage:
         return self.x, self.y, self.matrix
 
 
-w, h = 500, 300
+w, h = 500, 600
 quality = 40
 name = 'src/image/dog.png'
 
@@ -183,4 +187,4 @@ for t in range(quality):
     # all changes. check that everyone is here
     datas = over_image.get_data()
     main_image.add_images(datas)
-main_image.save_rez()
+    main_image.save_rez()
