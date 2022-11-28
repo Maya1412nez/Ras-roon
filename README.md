@@ -197,8 +197,34 @@ if its overlaying:
 ```
 
 # Баги
-## Matrix creating, logical
+- [X] **~~Matrix creating, logical~~**
 ![Matix](Doc/bugs/martix_logic1/main_image_from_1.1.1.png)
 Matrix:
 ![Matix](Doc/bugs/martix_logic1/main_image_1.1.1.png)
 ![Matix](Doc/bugs/martix_logic1/main_image_1.1.1_noticed.png)
+Reason - we were processing all except 1→1 : 
+0 → 1; 
+0 → 0;
+and 1 → 0:
+```
+if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+                            self.main_matrix[i][j] = over_matrix[small_i][small_j]
+```
+so, already occupied pixels were becomming free
+But we need in changing only 0 to 1:
+
+|Correct changing|Incorrect changing|
+|-----|-----|
+|0 → 0|1 → 0|
+|0 → 1|1 → 1|
+
+
+
+I've added checking freeness of pixel, so, now pixel changing only when main_matrix_pixel == 0:
+```
+                    if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+                            if self.main_matrix[i][j] == 0:
+                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
+```
