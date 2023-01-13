@@ -75,19 +75,76 @@
 #         i += 1
 #     sleep(0.2)
 
-values = list(map(int, input().split()))
-matrix = [['_' for _ in range(len(values) + 2)] for __ in range(max(values) + 3)]
-for i in range(len(matrix)):
-    for j in range(len(matrix[i])):
-        if i == 0 or i == (len(matrix) - 1) or j == 0 or j == (len(matrix[i])- 1):
-                matrix[i][j] = '*'
-        # if i > 0 and i < len(matrix[i]) - 1:
-        #     print(i - 1, values, len(matrix) - values[i - 1] - 2, values[i - 1])
-        #if i > len(matrix) - values[i - 1] - 2:
+# values = list(map(int, input().split()))
+# matrix = [['_' for _ in range(len(values) + 2)] for __ in range(max(values) + 3)]
+# for i in range(len(matrix)):
+#     for j in range(len(matrix[i])):
+#         if i == 0 or i == (len(matrix) - 1) or j == 0 or j == (len(matrix[i])- 1):
+#                 matrix[i][j] = '*'
+#         # if i > 0 and i < len(matrix[i]) - 1:
+#         #     print(i - 1, values, len(matrix) - values[i - 1] - 2, values[i - 1])
+#         #if i > len(matrix) - values[i - 1] - 2:
 
-        elif j > 0 and j < len(matrix[i]) - 1 and i > 0 and i < len(matrix):
-            if i == len(matrix) - values[j]:
-                matrix[i][j] = '='
+#         elif j > 0 and j < len(matrix[i]) - 1 and i > 0 and i < len(matrix):
+#             if i == len(matrix) - values[j]:
+#                 matrix[i][j] = '='
 
-for j in range(len(matrix)):
-    print(''.join(matrix[j]))
+# for j in range(len(matrix)):
+#     print(''.join(matrix[j]))
+
+
+# lst = input().split()
+# maxx = ''
+# for i in range(len(lst)):
+#     if len(set(lst[i].upper())) > len(maxx):
+#         maxx = lst[i]
+# print(maxx)
+
+# word = input()
+# maxx = ''
+# for el in (list(word)):
+#     if not maxx or list(word).count(el) > (list(word)).count(max):
+#         maxx = el
+# print(maxx)
+
+# sett1, sett2 = set(), set()
+
+# for i in range(int(input())):
+#     sett1.add(input())
+
+# for i in range(int(input())):
+#     sett2.add(input())
+# dif = list(sett1.intersection(sett2))
+# print()
+# for i in range(len(sett1.intersection(sett2))):
+#     print(dif[i])
+
+# class A:
+#     def met1(self):
+#         print('No')
+    
+#     def met2(self):
+#         self.met1()Z
+# a = A()
+# a.met2()
+# import random
+# lst = list(range(1, 50, 6))
+# random.shuffle(list(range(1, 50, 6)))
+# print(lst)
+
+# num1, num2 = map(int, input().split())
+# stroka1 = list(set(input().split()))
+# stroka2 =  list(set(input().split()))
+# for i in range(len(stroka1)):
+#     if stroka1[i] in stroka2:
+#         print('Yes')
+#     else:
+#         print('No')
+ballons = []
+n, m = map(int, input().split())
+for i in range(n):
+    ballons.append(set(map(int, input().split())))
+if len(set.intersection(*ballons)) > 0:
+    print(' '.join(map(str, sorted(list(set.intersection(*ballons))))))
+else:
+    print(-1)

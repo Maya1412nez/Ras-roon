@@ -1,4 +1,4 @@
-from random import choices
+from random import choices, shuffle
 
 
 class Individ:
@@ -18,8 +18,15 @@ class Population:
         for i in range(POP_LENTH):
             self.individs[i] = Individ()
 
-    def fight(self):
-        pass
+    def population_fight(self):
+        order = shuffle([i for i in range(POP_LENTH)])
+        for i in range(POP_LENTH // 2):
+            pass
+    
+    def local_fight(self, num1, num2):
+        if self.individs[num1].get_data[0] > self.individs[num2].get_data[0]:
+            return num1
+        return num2
 
 
 IND_LENTH = 10
