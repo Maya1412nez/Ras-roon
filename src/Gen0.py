@@ -1,5 +1,5 @@
-from random import choices, shuffle
-
+from random import choices, shuffle, randint
+from Funcs import pairwise
 
 class Individ:
     def __init__(self) -> None:
@@ -55,7 +55,22 @@ class Population:
             print(self.parents[i].get_data())
 
     def create_childs(self):
-        pass
+        order = [i for i in range(len(self.parents))]
+        shuffle(order)
+        print(order)
+        cut_place = randint(0, IND_LENTH)
+        for i, j in pairwise(order):
+            if j != None:
+                parent1, parent2 = self.parents[i], self.parents[j]
+                part1 = ((parent1.get_data())[0])[:cut_place]
+                part2 = ((parent2.get_data())[0])[cut_place:]
+                child = part1 + part2 # its a list, not obj
+            else:
+                child = self.parents[i]
+            print(child)
+
+            # add childs as obj of INDIVID class, add them quantity
+
 
 
 IND_LENTH = 10
@@ -64,4 +79,5 @@ pop1 = Population()
 pop1.create()
 pop1.population_fight()
 pop1.print_data()
+pop1.create_childs()
 
