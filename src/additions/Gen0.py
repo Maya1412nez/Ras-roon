@@ -2,8 +2,13 @@ from random import choices, shuffle, randint
 from Funcs import pairwise
 
 class Individ:
-    def __init__(self) -> None:
-        self.params = choices([0, 1], k=IND_LENTH)
+    def __init__(self, params=None):
+        self.params = []
+        if not params:
+            self.params = choices([0, 1], k=IND_LENTH)
+        else:
+            self.params = params
+            # print(self.params)
         self.quantity = sum(self.params)
     
     def get_data(self):
@@ -49,17 +54,23 @@ class Population:
             return i1
         return i2
 
-    def print_data(self):
-        for i in range(len(self.parents)):
-            # print(self.individs[i].get_data())
-            # print((self.individs[i].get_data())[1])
-            print(self.parents[i].get_data())
+    def print_data(self, individs=None, parents=None, childs=None):
+        if individs:
+            for i in range(len(self.individs)):
+                print(self.individs[i].get_data())
+        if parents:
+            for i in range(len(parents)):
+                print(parents[i].get_data())
+        if childs:
+            print(self.childs[i].get_data())
 
     def create_childs(self):
         order = [i for i in range(len(self.parents))]
         shuffle(order)
-        print(order)
+        # print(order)
         cut_place = randint(0, IND_LENTH)
+        dicts_i1 = 0
+        dicts_i2 = dicts_i1 + 1
         for i, j in pairwise(order):
             if j != None:
                 parent1, parent2 = self.parents[i], self.parents[j]
@@ -67,23 +78,27 @@ class Population:
                 part2 = ((parent2.get_data())[0])[cut_place:]
                 child1 = part1 + part2 # its a list, not obj
                 child2 = ((parent2.get_data())[0])[:cut_place] + ((parent1.get_data())[0])[cut_place:] # its a list, not obj
-                print('1-:', child1)
-                print('2-:', child2)
+                # print('1-:', child1)
+                # print('2-:', child2)
+                self.childs[dicts_i1] = child1
+                self.childs[dicts_i2] = child2
+                dicts_i1 += 2
+                dicts_i2 += 2
             else: # if its 1 parent at the end
-                child1 = (((self.parents[i]).get_data())[0])[cut_place:]
-                child2 = (((self.parents[i]).get_data())[0])[cut_place:]
-                print('1+:', child1)
-                print('2+:', child2)
+                child1 = (((self.parents[i]).get_data())[0])
+                # print('1+:', child1)
+                # print('2+:', child2)
+                self.childs[dicts_i1] = child1
+
 
 
             # add childs as obj of INDIVID class, add them quantity
 
     def create_pop_from_childs(self):
-        self.childs
         pop2 = Population()
-        i = 0
-        for child in self.childs:
-            pop2.individs[i] = child
+        # print(self.childs)    
+        for i, child in self.childs.items():
+            pop2.individs[i] = Individ(child)
             i += 1
         return pop2
 
@@ -97,6 +112,5 @@ pop1.population_fight()
 pop1.print_data()
 pop1.create_childs()
 pop2 = pop1.create_pop_from_childs()
-# print(1)
-pop2.print_data()
+pop1.print_data(individs=1)
 

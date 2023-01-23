@@ -6,5 +6,5 @@ def pairwise(iterable):
 
 l = [1, 2, 3, 4]
 
-for x, y in pairwise(l):
-   print(x, y)
+# for x, y in pairwise(l):
+#    print(x, y)
