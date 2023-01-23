@@ -171,8 +171,8 @@ class OverlayImage:
         return self.x, self.y, self.matrix
 
 
-WIDTH, HEIGHT = 500, 600
-QUALITY = 40
+WIDTH, HEIGHT = 800, 500
+QUALITY = 200
 NAME = 'src/image/dog.png'
 
 MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
