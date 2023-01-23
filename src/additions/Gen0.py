@@ -15,7 +15,7 @@ class Population:
         self.parents = {}
         self.childs = {}
 
-    def create(self):
+    def create_new(self):
         for i in range(POP_LENTH):
             self.individs[i] = Individ()
 
@@ -23,6 +23,7 @@ class Population:
     #     order = shuffle([i for i in range(POP_LENTH)])
     #     for i in range(POP_LENTH // 2):
             pass
+
 
     def population_fight(self):
         order = [i for i in range(POP_LENTH)]
@@ -64,20 +65,38 @@ class Population:
                 parent1, parent2 = self.parents[i], self.parents[j]
                 part1 = ((parent1.get_data())[0])[:cut_place]
                 part2 = ((parent2.get_data())[0])[cut_place:]
-                child = part1 + part2 # its a list, not obj
-            else:
-                child = self.parents[i]
-            print(child)
+                child1 = part1 + part2 # its a list, not obj
+                child2 = ((parent2.get_data())[0])[:cut_place] + ((parent1.get_data())[0])[cut_place:] # its a list, not obj
+                print('1-:', child1)
+                print('2-:', child2)
+            else: # if its 1 parent at the end
+                child1 = (((self.parents[i]).get_data())[0])[cut_place:]
+                child2 = (((self.parents[i]).get_data())[0])[cut_place:]
+                print('1+:', child1)
+                print('2+:', child2)
+
 
             # add childs as obj of INDIVID class, add them quantity
+
+    def create_pop_from_childs(self):
+        self.childs
+        pop2 = Population()
+        i = 0
+        for child in self.childs:
+            pop2.individs[i] = child
+            i += 1
+        return pop2
 
 
 
 IND_LENTH = 10
 POP_LENTH = 10
 pop1 = Population()
-pop1.create()
+pop1.create_new()
 pop1.population_fight()
 pop1.print_data()
 pop1.create_childs()
+pop2 = pop1.create_pop_from_childs()
+# print(1)
+pop2.print_data()
 
