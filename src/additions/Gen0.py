@@ -14,36 +14,45 @@ class Individ:
     def get_data(self):
         return self.params, self.quantity
 
+    def __lt__(self, other):
+        print((self.get_data())[1], (other.get_data())[1])
+        return (self.get_data())[1] < (other.get_data())[1]
+
+    def __gt__(self, other):
+        print((self.get_data())[1], (other.get_data())[1])
+        return (self.get_data())[1] > (other.get_data())[1]
+
 class Population:
     def __init__(self) -> None:
         self.individs = {} # every ind: {number: object}
         self.parents = {}
         self.childs = {}
-
+        self.best = None
+        if len(self.individs) > 0:
+            self.best = self.get_best()
     def create_new(self):
         for i in range(POP_LENTH):
             self.individs[i] = Individ()
+        self.best = self.get_best()
 
-    # def population_fight(self):
-    #     order = shuffle([i for i in range(POP_LENTH)])
-    #     for i in range(POP_LENTH // 2):
-            pass
 
 
     def population_fight(self):
-        order = [i for i in range(POP_LENTH)]
+        order = [i for i in range(len(self.individs))]
         shuffle(order)
         winner_list = []
-        for i in range(0, len(order), 2):
-            #print(order[i], order[i + 1])
-            i_winner = self.local_fight(i, i + 1)
-            # print(i_winner)
-            obj_winner = self.individs[i_winner]
-            winner_list.append(obj_winner)
-        if len(order) % 2 != 0: # if col of inds is odd, we add last individ without couple
-            winner_list.append(self.individs[-1])
+        for i, j in pairwise(order):
+            if j != None:
+                i_winner = self.local_fight(i, j)
+                obj_winner = self.individs[i_winner]
+                winner_list.append(obj_winner)
+            else:
+                winner_list.append(self.individs[i])
+            # print((obj_winner.get_data())[0])
+            # print((self.individs[i].get_data())[1], (self.individs[j].get_data())[1])
         for i in range(len(winner_list)):
             self.parents[i] = winner_list[i]
+        self.best = self.get_best()
 
 
     
@@ -54,15 +63,18 @@ class Population:
             return i1
         return i2
 
-    def print_data(self, individs=None, parents=None, childs=None):
+    def print_data(self, individs=None, parents=None, childs=None, best=None):
         if individs:
             for i in range(len(self.individs)):
                 print(self.individs[i].get_data())
         if parents:
-            for i in range(len(parents)):
-                print(parents[i].get_data())
+            for i in range(len(self.parents)):
+                print(self.parents[i].get_data())
         if childs:
-            print(self.childs[i].get_data())
+            for i in range(len(self.childs)):
+                print(self.childs[i].get_data())
+        if best:
+            print('BEST:', self.best.get_data())
 
     def create_childs(self):
         order = [i for i in range(len(self.parents))]
@@ -96,11 +108,15 @@ class Population:
 
     def create_pop_from_childs(self):
         pop2 = Population()
-        # print(self.childs)    
+        self.best = self.get_best()
         for i, child in self.childs.items():
             pop2.individs[i] = Individ(child)
             i += 1
         return pop2
+
+    
+    def get_best(self):
+        return  self.individs[max(self.individs, key=self.individs.get)]
 
 
 
@@ -108,9 +124,13 @@ IND_LENTH = 10
 POP_LENTH = 10
 pop1 = Population()
 pop1.create_new()
+# pop1.print_data(individs=1)
 pop1.population_fight()
-pop1.print_data()
 pop1.create_childs()
+# print(111111111111)
 pop2 = pop1.create_pop_from_childs()
-pop1.print_data(individs=1)
+pop2.population_fight()
+pop2.print_data(parents=1, best=1)
+pop2.create_childs()
+pop3 = pop2.create_pop_from_childs()
 
