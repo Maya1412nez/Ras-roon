@@ -8,7 +8,6 @@ class Individ:
             self.params = choices([0, 1], k=IND_LENTH)
         else:
             self.params = params
-            # print(self.params)
         self.quantity = sum(self.params)
     
     def get_data(self):
@@ -30,12 +29,11 @@ class Population:
         self.best = None
         if len(self.individs) > 0:
             self.best = self.get_best()
+
     def create_new(self):
         for i in range(POP_LENTH):
             self.individs[i] = Individ()
         self.best = self.get_best()
-
-
 
     def population_fight(self):
         order = [i for i in range(len(self.individs))]
@@ -53,8 +51,6 @@ class Population:
         for i in range(len(winner_list)):
             self.parents[i] = winner_list[i]
         self.best = self.get_best()
-
-
     
     def local_fight(self, i1, i2): # i1 and i2 = i in cycle with step=2
         # print(f'''{(self.individs[i1].get_data())} qual = {(self.individs[i1].get_data())[1]} i = {i1}
@@ -66,20 +62,19 @@ class Population:
     def print_data(self, individs=None, parents=None, childs=None, best=None):
         if individs:
             for i in range(len(self.individs)):
-                print(self.individs[i].get_data())
+                print(f'INDIVID {i}', self.individs[i].get_data())
         if parents:
             for i in range(len(self.parents)):
-                print(self.parents[i].get_data())
+                print(f'PARENT {i}', self.parents[i].get_data())
         if childs:
             for i in range(len(self.childs)):
-                print(self.childs[i].get_data())
+                print(f'CHILD {i}', self.childs[i].get_data())
         if best:
             print('BEST:', self.best.get_data())
 
     def create_childs(self):
         order = [i for i in range(len(self.parents))]
         shuffle(order)
-        # print(order)
         cut_place = randint(0, IND_LENTH)
         dicts_i1 = 0
         dicts_i2 = dicts_i1 + 1
@@ -102,10 +97,6 @@ class Population:
                 # print('2+:', child2)
                 self.childs[dicts_i1] = child1
 
-
-
-            # add childs as obj of INDIVID class, add them quantity
-
     def create_pop_from_childs(self):
         pop2 = Population()
         self.best = self.get_best()
@@ -114,7 +105,6 @@ class Population:
             i += 1
         return pop2
 
-    
     def get_best(self):
         return  self.individs[max(self.individs, key=self.individs.get)]
 
@@ -124,11 +114,10 @@ IND_LENTH = 10
 POP_LENTH = 10
 pop1 = Population()
 pop1.create_new()
-# pop1.print_data(individs=1)
 pop1.population_fight()
 pop1.create_childs()
+pop1.print_data(individs=1)
 pop2 = pop1.create_pop_from_childs()
-# print(111111111111)
 pop2.population_fight()
 pop2.print_data(parents=1, best=1)
 pop2.create_childs()
