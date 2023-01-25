@@ -9,11 +9,14 @@ class MainImage:
     def __init__(self, width, height):
         self.main_width = width
         self.main_height = height
-        self.main_image = Image.new('RGB', (self.main_width, self.main_height), (0, 0, 0, 0))
-        self.main_demo_image = Image.new('RGB', (self.main_width, self.main_height), (118, 255, 97))
-        self.main_matrix = [[0 for _ in range(self.main_width)] for __ in range(self.main_height)]
+        self.main_image = Image.new(
+            'RGB', (self.main_width, self.main_height), (0, 0, 0, 0))
+        self.main_demo_image = Image.new(
+            'RGB', (self.main_width, self.main_height), (118, 255, 97))
+        self.main_matrix = [
+            [0 for _ in range(self.main_width)] for __ in range(self.main_height)]
 
-    def add_images(self, data):  
+    def add_images(self, data):
         overlaying_image = Image.open('src/rezs/ready_image.png')
         x, y, over_matrix = data
         ov_im_width, ov_im_height = overlaying_image.size
@@ -24,8 +27,9 @@ class MainImage:
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
             overlay = False
-            over_matrix[0][0] = 'A' # helping marks
-            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z' # helping marks
+            over_matrix[0][0] = 'A'  # helping marks
+            # helping marks
+            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z'
             for i in range(self.main_height):
                 for j in range(self.main_width):
                     # ENTER
@@ -33,14 +37,16 @@ class MainImage:
                     small_j = j - x
                     # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
-                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+                        # be careful there
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
                             if self.main_matrix[i][j] == 0:
                                 self.main_matrix[i][j] = over_matrix[small_i][small_j]
 
                         else:
                             overlay = True
             if not overlay:
-                self.main_image.paste(overlaying_image, (x, y), overlaying_image)
+                self.main_image.paste(
+                    overlaying_image, (x, y), overlaying_image)
                 good_height = True
                 im_qual += 1
                 # fail_count = 0
@@ -63,7 +69,6 @@ class MainImage:
         for row in self.main_matrix:
             file.write(str(row))
             file.write('\n')
-        
 
 
 class OverlayImage:
@@ -78,7 +83,8 @@ class OverlayImage:
                                     (118, 255, 97))
         self.demo_image.paste(self.image, (0, 0), self.image)
         self.pixels = self.image.load()
-        self.matrix = [[0] * self.width for _ in range(self.height)]  # создание матрицы с нулями
+        # создание матрицы с нулями
+        self.matrix = [[0] * self.width for _ in range(self.height)]
 
     def crop(self):
         image_square = 0
@@ -117,7 +123,6 @@ class OverlayImage:
                         if lower_right_coord[1] < j:
                             lower_right_coord[1] = j
                     # -----------------------------
-
         print((f'''New coords:
                         Upper Left point: {upper_left_coord[0], upper_left_coord[1]};
                         Lower right point: {lower_right_coord[0], lower_right_coord[1]}
@@ -142,13 +147,15 @@ class OverlayImage:
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
         degrees = choice(flip_degrees)  # выбор градуса поворота
 
-        self.image = self.image.rotate(degrees, expand=True)  # поворот PNG изображения
+        self.image = self.image.rotate(
+            degrees, expand=True)  # поворот PNG изображения
         self.demo_image = self.demo_image.rotate(
             degrees,
             expand=True)  # поворот того же изображения, но наложенного на зеленый фон (r = 118 and g = 255 and b = 97)
         self.width, self.height = self.image.size  # переопределение размеров
         print(self.image.size)
-        self.x, self.y = (randint(0, main_image_width - self.width)), (main_image_height - self.height)
+        self.x, self.y = (randint(0, main_image_width - self.width)
+                          ), (main_image_height - self.height)
         print(self.x, self.y)
         # x, y = 10, (self.main_image_height - self.height)
         print(
@@ -169,7 +176,6 @@ class OverlayImage:
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
         self.image.save('src/rezs/ready_image.png')
         return self.x, self.y, self.matrix
-
 
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200

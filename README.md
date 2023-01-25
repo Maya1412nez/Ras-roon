@@ -156,8 +156,6 @@ def add_images(self, data):
 
 > В работе автором была реализована программа, решающая задачу раскроя с произвольными фигурами, а так же реализована возможность пользователя самостоятельно задавать основные параметры для создания необходимого раскроя.
 >
-#
-
 # Неудачные идеи
 
 Пихание объектов на полотно, начиная с угла
@@ -246,10 +244,13 @@ b = A(2)
 my_new_dict = {"q": [a, 1], "z": [b, 0]}
 print(max(my_new_dict, key=my_new_dict.get))
 ```
-### gitignore if file created before 
+
+### gitignore if file created before
+
 ```
 git rm -r --cached . && git add . && git commit -am "Remove ignored files"
 ```
+
 # Баги
 
 - [X] **~~Matrix creating, logical~~**
