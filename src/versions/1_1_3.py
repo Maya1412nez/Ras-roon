@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
 import copy
-from random import choice
-
+from importlib.machinery import all_suffixes
+from random import randint, choice
+import time
 from PIL import Image
 
 
@@ -8,64 +10,80 @@ class MainImage:
     def __init__(self, width, height):
         self.main_width = width
         self.main_height = height
-        self.main_image = Image.new('RGB', (self.main_width, self.main_height), (0, 0, 0, 0))
-        self.main_demo_image = Image.new('RGB', (self.main_width, self.main_height), (118, 255, 97))
-        self.main_matrix = [[0 for _ in range(self.main_width)] for __ in range(self.main_height)]
+        self.main_image = Image.new(
+            'RGB', (self.main_width, self.main_height), (0, 0, 0, 0))
+        self.main_demo_image = Image.new(
+            'RGB', (self.main_width, self.main_height), (118, 255, 97))
+        self.main_matrix = [
+            [0 for _ in range(self.main_width)] for __ in range(self.main_height)]
+        self.all_images = dict() # {[width, height]: [image_obj.png, matrix]}. For rewathcing
 
     def add_images(self, data):
-        print(data)
-        x_or_y = -1  # -1, -2 - x; 1, 2 - y. If abs(x_or_y) == 2, it means we cant change this param (bcs x or y near 0)
-        overlaying_image = Image.open('rezs/ready_image.png')
-        x, y, move_x, move_y, over_matrix = data
+        overlaying_image = Image.open('src/rezs/ready_image.png')
+        x, y, over_matrix = data
         ov_im_width, ov_im_height = overlaying_image.size
         good_height = False
         im_qual = 0
         fail_count = 0
-        print(move_x, move_y)
-        while not good_height and abs(x_or_y) != 2:
+        if [ov_im_width, ov_im_height] not in self.all_images:
+            self.all_images[ov_im_width, ov_im_height] = [overlaying_image, over_matrix]
+
+        while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
             overlay = False
+            over_matrix[0][0] = 'A'  # helping marks
+            # helping marks
+            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z'
             for i in range(self.main_height):
                 for j in range(self.main_width):
                     # ENTER
                     small_i = i - y
                     small_j = j - x
+                    # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
+                        # be careful there
                         if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
-                            self.main_matrix[i][j] = over_matrix[small_i][small_j]
+                            if self.main_matrix[i][j] == 0:
+                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
 
                         else:
                             overlay = True
             if not overlay:
-                self.main_image.paste(overlaying_image, (x, y), overlaying_image)
+                self.main_image.paste(
+                    overlaying_image, (x, y), overlaying_image)
                 good_height = True
                 im_qual += 1
                 # fail_count = 0
             else:
                 fail_count += 1
-                self.main_matrix = matrix_copy
-                # CHECK IT IF INCORRECT MOVING
-                if x_or_y > 0:
-                    if x_or_y == 1:  # if x_or_y still not constant
-                        x_or_y = -1  # the next shift in x
-                    if y - move_y >= 0:  # if we can move image on y without going beyond
-                        y -= move_y  # moving
-                    else:
-                        x_or_y = -2  # Now we can't move on y
 
-                elif x_or_y < 0:
-                    if x_or_y == -1:  # if x_or_y still not constant
-                        x_or_y = 1  # the next shift in y
-                    if x - move_x >= 0:  # if we can move image on y without going beyond
-                        x -= move_x  # moving
-                    else:
-                        x_or_y = 2  # Now we can't move on x
-            print(x_or_y)
-        print('DONE!', "Fails =", fail_count)
+                self.main_matrix = matrix_copy
+                y -= 10
+
+        print('DONE!')
+
+        # self.main_image.show()
+        # print(*self.main_matrix, sep='\n')
+        # time.sleep(3)
 
     def save_rez(self):
-        self.main_image.save('rezs/main_image_from_1.1.2.png')
-        print(*self.main_matrix, sep='\n')
+        self.main_image.save('src/rezs/main_image_from_1.1.1.png')
+        # print(*self.main_matrix, sep='\n')
+        file = open('src/rezult_1.1.1.txt', 'w', encoding='utf-8')
+        for row in self.main_matrix:
+            file.write(str(row))
+            file.write('\n')
+
+    # def rewatch(self): # images - all turned images
+        # empty_space_width, empty_space_height = 0, 0
+        # coords = 0, 0
+        # for i in range(self.main_height):
+        #     for j in range(self.main_width):
+        #         if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
+        #                     if self.main_matrix[i][j] == 0:
+        #                         pass
+
+
 
 
 class OverlayImage:
@@ -73,7 +91,6 @@ class OverlayImage:
         self.image = Image.open(image_name)
         self.width, self.height = self.image.size
         self.x, self.y = 0, 0
-        self.x_moving_percent, self.y_moving_percent = None, None
 
         print(f'''Start image size:
                 Width: {self.width} Height: {self.height}''')
@@ -81,7 +98,8 @@ class OverlayImage:
                                     (118, 255, 97))
         self.demo_image.paste(self.image, (0, 0), self.image)
         self.pixels = self.image.load()
-        self.matrix = [[0] * self.width for _ in range(self.height)]  # создание матрицы с нулями
+        # создание матрицы с нулями
+        self.matrix = [[0] * self.width for _ in range(self.height)]
 
     def crop(self):
         image_square = 0
@@ -120,7 +138,6 @@ class OverlayImage:
                         if lower_right_coord[1] < j:
                             lower_right_coord[1] = j
                     # -----------------------------
-
         print((f'''New coords:
                         Upper Left point: {upper_left_coord[0], upper_left_coord[1]};
                         Lower right point: {lower_right_coord[0], lower_right_coord[1]}
@@ -138,20 +155,22 @@ class OverlayImage:
         print(f'''Possible quality: {possible_quality}''')
 
     def save_rez(self):
-        self.image.save('rezs/image.png')
-        self.demo_image.save('rezs/demo_image.png')
+        self.image.save('src/rezs/image.png')
+        self.demo_image.save('src/rezs/demo_image.png')
 
-    def edit_random(self, main_image_width, main_image_height, percent):
+    def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
         degrees = choice(flip_degrees)  # выбор градуса поворота
 
-        self.image = self.image.rotate(degrees, expand=True)  # поворот PNG изображения
+        self.image = self.image.rotate(
+            degrees, expand=True)  # поворот PNG изображения
         self.demo_image = self.demo_image.rotate(
             degrees,
             expand=True)  # поворот того же изображения, но наложенного на зеленый фон (r = 118 and g = 255 and b = 97)
         self.width, self.height = self.image.size  # переопределение размеров
         print(self.image.size)
-        self.x, self.y = (main_image_width - self.width), (main_image_height - self.height)
+        self.x, self.y = (randint(0, main_image_width - self.width)
+                          ), (main_image_height - self.height)
         print(self.x, self.y)
         # x, y = 10, (self.main_image_height - self.height)
         print(
@@ -159,7 +178,6 @@ class OverlayImage:
                 New random flip degrees: {degrees}
                 ''')
         self.pixels = self.image.load()
-        self.x_moving_percent, self.y_moving_percent = int(self.width * percent), int(self.height * percent)
 
     def create_matrix(self):
         # check pixels, matrix
@@ -171,25 +189,23 @@ class OverlayImage:
 
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
-        self.image.save('rezs/ready_image.png')
-        return self.x, self.y, self.x_moving_percent, self.y_moving_percent, self.matrix
+        self.image.save('src/rezs/ready_image.png')
+        return self.x, self.y, self.matrix
 
+# WIDTH, HEIGHT = 800, 500
+# QUALITY = 200
+# NAME = 'src/image/dog.png'
 
-WIDTH, HEIGHT = 500, 600
-QUALITY = 40
-NAME = 'src/image/dog.png'
+# MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
 
-MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
-
-for t in range(QUALITY):
-    # all changes. check that everyone is here
-    OVER_IMAGE = OverlayImage(NAME)
-    OVER_IMAGE.crop()
-    OVER_IMAGE.edit_random(WIDTH, HEIGHT)
-    OVER_IMAGE.create_matrix()
-    OVER_IMAGE.save_rez()
-    # all changes. check that everyone is here
-    datas = OVER_IMAGE.get_data()
-    MAIN_IMAGE.add_images(datas)
-    MAIN_IMAGE.save_rez()
-MAIN_IMAGE.save_rez()
+# for t in range(QUALITY):
+#     # all changes. check that everyone is here
+#     OVER_IMAGE = OverlayImage(NAME)
+#     OVER_IMAGE.crop()
+#     OVER_IMAGE.edit_random(WIDTH, HEIGHT)
+#     OVER_IMAGE.create_matrix()
+#     OVER_IMAGE.save_rez()
+#     # all changes. check that everyone is here
+#     datas = OVER_IMAGE.get_data()
+#     MAIN_IMAGE.add_images(datas)
+#     MAIN_IMAGE.save_rez()
