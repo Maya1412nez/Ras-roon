@@ -16,17 +16,29 @@ class MainImage:
             'RGB', (self.main_width, self.main_height), (118, 255, 97))
         self.main_matrix = [
             [0 for _ in range(self.main_width)] for __ in range(self.main_height)]
-        self.all_images = dict() # {[width, height]: [image_obj.png, matrix]}. For rewathcing
+        self.all_images = dict() # {[width, height, degrees, image_obj.png, matrix], 
+        # i: [image_obj.png, matrix]}. For rewathcing
+        self.keys_count = 0
 
     def add_images(self, data):
         overlaying_image = Image.open('src/rezs/ready_image.png')
-        x, y, over_matrix = data
+        x, y, over_matrix, degrees = data
         ov_im_width, ov_im_height = overlaying_image.size
         good_height = False
         im_qual = 0
         fail_count = 0
-        if [ov_im_width, ov_im_height] not in self.all_images:
-            self.all_images[ov_im_width, ov_im_height] = [overlaying_image, over_matrix]
+        self.keys_count += 1
+        for i in range(len(self.all_images)):
+            print(list(self.all_images[i][:3]))
+            print([ov_im_width, ov_im_height, degrees])
+            print(list(self.all_images[i][:3]) != (ov_im_width, ov_im_height, degrees))
+            if list(self.all_images[i][:3]) != (ov_im_width, ov_im_height, degrees):
+                self.all_images[self.keys_count] = ov_im_width, ov_im_height, degrees, overlaying_image, over_matrix 
+                self.keys_count += 1
+                print(self.keys_count)
+        if len(self.all_images) == 0:
+            self.all_images[self.keys_count] = ov_im_width, ov_im_height, degrees, overlaying_image, over_matrix 
+
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -73,15 +85,15 @@ class MainImage:
         for row in self.main_matrix:
             file.write(str(row))
             file.write('\n')
+        print(len(self.all_images))
 
-    # def rewatch(self): # images - all turned images
-        # empty_space_width, empty_space_height = 0, 0
-        # coords = 0, 0
-        # for i in range(self.main_height):
-        #     for j in range(self.main_width):
-        #         if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
-        #                     if self.main_matrix[i][j] == 0:
-        #                         pass
+    def rewatch(self): # images - all turned images
+        empty_space_width, empty_space_height = 0, 0
+        small_i, small_j = 0, 0 # small_i, small_j, coords
+        for i in range(self.main_height):
+            for j in range(self.main_width): # пробег по всей матрице
+                for g in range(len(self.all_images) // 2):
+                    over_matrix = self.all_images[i][1]
 
 
 
@@ -160,12 +172,12 @@ class OverlayImage:
 
     def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
-        degrees = choice(flip_degrees)  # выбор градуса поворота
+        self.degrees = choice(flip_degrees)  # выбор градуса поворота
 
         self.image = self.image.rotate(
-            degrees, expand=True)  # поворот PNG изображения
+            self.degrees, expand=True)  # поворот PNG изображения
         self.demo_image = self.demo_image.rotate(
-            degrees,
+            self.degrees,
             expand=True)  # поворот того же изображения, но наложенного на зеленый фон (r = 118 and g = 255 and b = 97)
         self.width, self.height = self.image.size  # переопределение размеров
         print(self.image.size)
@@ -175,7 +187,7 @@ class OverlayImage:
         # x, y = 10, (self.main_image_height - self.height)
         print(
             f'''New random coordinates: {self.x, self.y}
-                New random flip degrees: {degrees}
+                New random flip degrees: {self.degrees}
                 ''')
         self.pixels = self.image.load()
 
@@ -190,22 +202,22 @@ class OverlayImage:
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
         self.image.save('src/rezs/ready_image.png')
-        return self.x, self.y, self.matrix
+        return self.x, self.y, self.matrix, self.degrees
 
-# WIDTH, HEIGHT = 800, 500
-# QUALITY = 200
-# NAME = 'src/image/dog.png'
+WIDTH, HEIGHT = 800, 500
+QUALITY = 20
+NAME = 'src/image/dog.png'
 
-# MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
+MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
 
-# for t in range(QUALITY):
-#     # all changes. check that everyone is here
-#     OVER_IMAGE = OverlayImage(NAME)
-#     OVER_IMAGE.crop()
-#     OVER_IMAGE.edit_random(WIDTH, HEIGHT)
-#     OVER_IMAGE.create_matrix()
-#     OVER_IMAGE.save_rez()
-#     # all changes. check that everyone is here
-#     datas = OVER_IMAGE.get_data()
-#     MAIN_IMAGE.add_images(datas)
-#     MAIN_IMAGE.save_rez()
+for t in range(QUALITY):
+    # all changes. check that everyone is here
+    OVER_IMAGE = OverlayImage(NAME)
+    OVER_IMAGE.crop()
+    OVER_IMAGE.edit_random(WIDTH, HEIGHT)
+    OVER_IMAGE.create_matrix()
+    OVER_IMAGE.save_rez()
+    # all changes. check that everyone is here
+    datas = OVER_IMAGE.get_data()
+    MAIN_IMAGE.add_images(datas)
+    MAIN_IMAGE.save_rez()
