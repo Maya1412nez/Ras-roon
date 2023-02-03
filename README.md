@@ -187,7 +187,7 @@ elif x_or_y < 0:
 
 ### Recounting alg
 
-```
+```python
 if its overlaying:
     u = count pix for moving up
     l = count pix for moving left
@@ -207,9 +207,11 @@ if its overlaying:
 
 А если пробегаться по пустой основной матрице и на каждой площади, равной площади картинки просматривать, наложится ли. Так просматривать на однй координаты для площадей разных картинок. Первую подходящую вставлять.
 
+В презентацию / научную работу добавит данные об обрезке (старые размеры, новые размеры)
+
 ### Пример сравниния обьектов (Gen0, Population, self.best)
 
-```
+```python
 class A:
     def __init__(self, a) -> None:
         self.a = [[1, 0, 1], a]
@@ -240,7 +242,7 @@ class A:
 |def___le___|<=|
 |def___ge___|>=|
 
-```
+```python
 a = A(1)
 b = A(2)
 my_new_dict = {"q": [a, 1], "z": [b, 0]}
@@ -265,10 +267,10 @@ Reason - we were processing all except 1→1 :
 0 → 0;
 and 1 → 0:
 
-```
+```python
 if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
-                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
-                            self.main_matrix[i][j] = over_matrix[small_i][small_j]
+        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+            self.main_matrix[i][j] = over_matrix[small_i][small_j]
 ```
 
 so, already occupied pixels were becomming free
@@ -281,9 +283,12 @@ But we need in changing only 0 to 1:
 
 I've added checking freeness of pixel, so, now pixel changing only when main_matrix_pixel == 0:
 
+```python
+if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
+        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
+            if self.main_matrix[i][j] == 0:
+                self.main_matrix[i][j] = over_matrix[small_i][small_j]
 ```
-                    if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
-                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1: # be careful there
-                            if self.main_matrix[i][j] == 0:
-                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
-```
+
+Output has new width and new height: of overlay image and of main image. Looks same. I shiould refactor method **crop** to make beautiful output
+![Matix](Doc/bugs/output.png)

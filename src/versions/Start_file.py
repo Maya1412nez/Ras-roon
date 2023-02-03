@@ -1,7 +1,7 @@
-from Verse1_1_1 import MainImage, OverlayImage
 
+from Verse1_1_1 import MainImage, OverlayImage
 WIDTH, HEIGHT = 800, 500
-QUALITY = 20
+QUALITY = 2
 NAME = 'src/image/dog.png'
 
 MAIN_IMAGE = MainImage(WIDTH, HEIGHT)

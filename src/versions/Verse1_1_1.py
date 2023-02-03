@@ -5,70 +5,6 @@ import time
 from PIL import Image
 
 
-class MainImage:
-    def __init__(self, width, height):
-        self.main_width = width
-        self.main_height = height
-        self.main_image = Image.new(
-            'RGB', (self.main_width, self.main_height), (0, 0, 0, 0))
-        self.main_demo_image = Image.new(
-            'RGB', (self.main_width, self.main_height), (118, 255, 97))
-        self.main_matrix = [
-            [0 for _ in range(self.main_width)] for __ in range(self.main_height)]
-
-    def add_images(self, data):
-        overlaying_image = Image.open('src/rezs/ready_image.png')
-        x, y, over_matrix = data
-        ov_im_width, ov_im_height = overlaying_image.size
-        good_height = False
-        im_qual = 0
-        fail_count = 0
-
-        while not good_height and y >= 0:
-            matrix_copy = copy.deepcopy(self.main_matrix)
-            overlay = False
-            over_matrix[0][0] = 'A'  # helping marks
-            # helping marks
-            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z'
-            for i in range(self.main_height):
-                for j in range(self.main_width):
-                    # ENTER
-                    small_i = i - y
-                    small_j = j - x
-                    # Be careful when reading matrix with marks!!
-                    if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
-                        # be careful there
-                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
-                            if self.main_matrix[i][j] == 0:
-                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
-
-                        else:
-                            overlay = True
-            if not overlay:
-                self.main_image.paste(
-                    overlaying_image, (x, y), overlaying_image)
-                good_height = True
-                im_qual += 1
-                # fail_count = 0
-            else:
-                fail_count += 1
-
-                self.main_matrix = matrix_copy
-                y -= 10
-
-        print('DONE!')
-
-        # self.main_image.show()
-        # print(*self.main_matrix, sep='\n')
-        # time.sleep(3)
-
-    def save_rez(self):
-        self.main_image.save('src/rezs/main_image_from_1.1.1.png')
-        # print(*self.main_matrix, sep='\n')
-        file = open('src/rezult_1.1.1.txt', 'w', encoding='utf-8')
-        for row in self.main_matrix:
-            file.write(str(row))
-            file.write('\n')
 
 
 class OverlayImage:
@@ -138,10 +74,16 @@ class OverlayImage:
         self.image = self.image.crop(
             (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0], lower_right_coord[1]))
         print(f'''Possible quality: {possible_quality}''')
+        self.width, self.height = self.image.size  # переопределение размеров
+        print(f'new width: {self.width}, new_height: {self.height}')
 
-    def save_rez(self):
-        self.image.save('src/rezs/image.png')
-        self.demo_image.save('src/rezs/demo_image.png')
+    def save_rez(self, name=None):
+        if name == None:
+            self.image.save('src/rezs/image.png')
+            self.demo_image.save('src/rezs/demo_image.png')
+        # else:
+        #     self.image.save(f'src/rezs/{name}.png')
+        #     self.demo_image.save(f'src/rezs/{name}.png')
 
     def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
@@ -175,7 +117,90 @@ class OverlayImage:
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
         self.image.save('src/rezs/ready_image.png')
-        return self.x, self.y, self.matrix
+        rez = dict()
+        rez['x'] = self.x
+        rez['y'] = self.y
+        rez['height'] = self.height
+        rez['matrix'] = self.matrix
+        rez['width'] = self.width
+        return rez
+
+
+class MainImage(OverlayImage):
+    def __init__(self, width, height):
+        self.width = width
+        self.height = height
+        self.image = Image.new(
+            'RGBA', (self.width, self.height), (0, 0, 0, 0))
+        self.demo_image = Image.new(
+            'RGBA', (self.width, self.height), (118, 255, 97))
+        self.main_matrix = [
+            [0 for _ in range(self.width)] for __ in range(self.height)]
+        self.pixels = self.image.load()
+
+
+    def add_images(self, data):
+        overlaying_image = Image.open('src/rezs/ready_image.png')
+        x, y, over_matrix = data['x'], data['y'], data['matrix']
+        ov_im_width, ov_im_height = overlaying_image.size
+        good_height = False
+        im_qual = 0
+        fail_count = 0
+
+        while not good_height and y >= 0:
+            matrix_copy = copy.deepcopy(self.main_matrix)
+            overlay = False
+            over_matrix[0][0] = 'A'  # helping marks
+            # helping marks
+            over_matrix[ov_im_height - 1][ov_im_width - 1] = 'Z'
+            for i in range(self.height):
+                for j in range(self.width):
+                    # ENTER
+                    small_i = i - y
+                    small_j = j - x
+                    # Be careful when reading matrix with marks!!
+                    if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
+                        # be careful there
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
+                            if self.main_matrix[i][j] == 0:
+                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
+
+                        else:
+                            overlay = True
+            if not overlay:
+                self.image.paste(
+                    overlaying_image, (x, y), overlaying_image)
+                good_height = True
+                im_qual += 1
+                # fail_count = 0
+            else:
+                fail_count += 1
+
+                self.main_matrix = matrix_copy
+                y -= 10
+
+        print('DONE!')
+
+        # self.main_image.show()
+        # print(*self.main_matrix, sep='\n')
+        # time.sleep(3)
+
+    def save_rez(self, name=None):
+        if name == None:
+            self.image.save('src/rezs/main_image_from_1.1.1.png')
+            # print(*self.main_matrix, sep='\n')
+            file = open('src/rezs/rezult_1.1.1.txt', 'w', encoding='utf-8')
+        else:
+            self.image.save(f'src/rezs/{name}.png')
+            # print(*self.main_matrix, sep='\n')
+            file = open(f'src/rezs/{name}.txt', 'w', encoding='utf-8')
+
+        for row in self.main_matrix:
+            file.write(str(row))
+            file.write('\n')
+
+    def crop(self):
+        return super().crop()
 
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200
