@@ -2,6 +2,7 @@
 import copy
 from random import randint, choice
 from PIL import Image
+import os
 
 
 class OverlayImage:
@@ -128,6 +129,7 @@ class OverlayImage:
 
 class MainImage(OverlayImage):
     def __init__(self, width, height):
+        self.path = 'src/all_images'
         self.width = width
         self.height = height
         self.image = Image.new(
@@ -139,8 +141,8 @@ class MainImage(OverlayImage):
         self.pixels = self.image.load()
         self.recheck_image = OverlayImage('src/image/ten.png')
         self.recheck_image.create_matrix()
-        self.recheck_matrix = self.recheck_image.matrix
         self.recheck_image_image = Image.open('src/image/ten.png')
+
 
     def add_images(self, data):
         overlaying_image = Image.open('src/rezs/ready_image.png')
@@ -149,6 +151,8 @@ class MainImage(OverlayImage):
         good_height = False
         im_qual = 0
         fail_count = 0
+        # if not self.recheck_images[overlaying_image]:
+        #     self.recheck_images[overlaying_image] = [data['matrix'], ]
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -216,7 +220,7 @@ class MainImage(OverlayImage):
                     for i1 in range(self.recheck_image.height):
                         for j1 in range(self.recheck_image.width):
                             if self.main_matrix[i + i1][j + j1] == 0:
-                                self.main_matrix[i + i1][j + j1] = self.recheck_matrix[i1][j1]
+                                self.main_matrix[i + i1][j + j1] = self.recheck_image.matrix[i1][j1]
                             else:
                                 overlay = True
                     if not overlay:
