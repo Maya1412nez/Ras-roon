@@ -1,4 +1,5 @@
 from Verse1_1_1 import MainImage, OverlayImage
+from Gen0 import Individ, Population
 
 def create_small_matrixes():
     MATIX_QUANTITY = 4
@@ -26,3 +27,10 @@ def create_small_matrixes():
             MAIN_IMAGE.add_images(datas)
         MAIN_IMAGE.crop()
         MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
+        
+
+create_small_matrixes()
+BESTIES = []
+population = Population()
+population.create_new()
+    

@@ -33,10 +33,15 @@ class Population:
             self.best = self.get_best()
         self.quality = 0
 
-    def create_new(self):
-        for i in range(POP_LENTH):
-            self.individs[i] = Individ()
+    def create_new(self, all_params=None):
+        if not all_params:
+            for i in range(POP_LENTH):
+                self.individs[i] = Individ()
+        else:
+            for i in range(len(all_params)):
+                self.individs[i] = Individ(all_params[i])
         self.best = self.get_best()
+
 
     def population_fight(self):
         order = [i for i in range(len(self.individs))]
@@ -119,22 +124,31 @@ class Population:
     def get_best(self):
         return self.individs[max(self.individs, key=self.individs.get)]
 
-IND_LENTH = 10
-POP_LENTH = 60
-POP_QUANT = 6
-BESTIES = []
-population = Population()
-population.create_new()
 
-for i in range(POP_QUANT):
-    population.population_fight()
-    population.create_childs()
-    population.print_data(all=1)
-    BESTIES.append(population.get_best())
-    print('POPULATION QUALITY:', population.get_pop_quality()) # make grafic
-    print('------------NEW GENERATION----------------')
-    population = population.create_pop_from_childs()
+try:
+    from Gen1_1_1 import IND_LENTH, POP_LENTH, POP_QUANT
+except:
+    IND_LENTH = 10
+    POP_LENTH = 60
+    POP_QUANT = 6
+# IND_LENTH = 10
+# POP_LENTH = 60
+# POP_QUANT = 6
 
-# for i in range(len(BESTIES)):
-#     print(BESTIES[i].get_data())
-print('BEST EVER: ', max(BESTIES).get_data())
+
+# BESTIES = []
+# population = Population()
+# population.create_new()
+
+# for i in range(POP_QUANT):
+#     population.population_fight()
+#     population.create_childs()
+#     population.print_data(all=1)
+#     BESTIES.append(population.get_best())
+#     print('POPULATION QUALITY:', population.get_pop_quality()) # make grafic
+#     print('------------NEW GENERATION----------------')
+#     population = population.create_pop_from_childs()
+
+# # for i in range(len(BESTIES)):
+# #     print(BESTIES[i].get_data())
+# print('BEST EVER: ', max(BESTIES).get_data())

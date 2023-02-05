@@ -9,6 +9,8 @@ class Individ:
             self.params = (choices(['0', '1'], k=IND_LENTH), choices(['0', '1'], k=IND_LENTH))
         else:
             self.params = params
+
+    def count_quantity(self):
         self.quantity = int(''.join(self.params[0]), 2) + int(''.join(self.params[1]), 2)
 
     def get_data(self):
@@ -33,9 +35,13 @@ class Population:
             self.best = self.get_best()
         self.quality = 0
 
-    def create_new(self):
-        for i in range(POP_LENTH):
-            self.individs[i] = Individ()
+    def create_new(self, all_params=None):
+        if not all_params:
+            for i in range(POP_LENTH):
+                self.individs[i] = Individ()
+        else:
+            for i in range(len(all_params)):
+                self.individs[i] = Individ(all_params[i])
         self.best = self.get_best()
 
     def population_fight(self):
