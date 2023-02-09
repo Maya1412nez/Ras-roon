@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import copy
 from random import randint, choice
-from time import sleep
+import time
 from PIL import Image
 
 
@@ -125,8 +125,6 @@ class OverlayImage:
         rez['width'] = self.width
         return rez
 
-#--------------------------------------------------------------
-
 
 class MainImage(OverlayImage):
     def __init__(self, width, height):
@@ -155,7 +153,6 @@ class MainImage(OverlayImage):
         if new_image.matrix not in self.matrixes:
             self.matrixes.append(new_image.matrix)
             self.all_images.append(new_image)
-
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -212,11 +209,9 @@ class MainImage(OverlayImage):
     def crop(self):
         return super().crop()
 
-    # def a(self):
-    #     for image in self.all_images:
-    #         print(*image.matrix, sep='\n')
-
     def recheck(self):
+        t = 0
+        self.all_images = [self.all_images[0]]
         for i in range(self.height):
             for j in range(self.width):
                 for recheck_image in self.all_images:
@@ -236,14 +231,9 @@ class MainImage(OverlayImage):
                             # self.main_matrix[i][j]
 
                             self.main_matrix = matrix_copy
-                    t = i * j
-                    for c in range((t // 10)):
-                        s += "="
-                        sleep(0.01)
-                    s = "="*(t // 10) + "-"*((self.height) * self.width // 10)-(t // 10))
-                    print(f"\x1b[32m \r \r DONE: {t} from {QUALITY}   [{s}]'\x1b[0m", end='')
-
-            
+                t += 1
+                s = "="*(t // 1000) + "-"*(int((self.height * self.width) // 1000)-(t // 1000))
+                print(f"\r \x1b[34m DONE: {t} from {(self.height) * self.width}   [{s}]\x1b[0m", end='')
 
 
 # WIDTH, HEIGHT = 800, 500
