@@ -2,8 +2,8 @@
 from Verse1_1_4 import MainImage, OverlayImage
 from time import sleep
 
-WIDTH, HEIGHT = 300, 200
-QUALITY = 70
+WIDTH, HEIGHT = 200, 200
+QUALITY = 30
 NAME = 'src/image/dog.png'
 
 MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
@@ -20,8 +20,8 @@ for t in range(QUALITY):
     MAIN_IMAGE.add_images(datas)
     MAIN_IMAGE.save_rez(name='imp/1')
     s = "="*(t // 10) + "-"*((QUALITY // 10)-(t // 10))
-    print(f"\x1b[32m \r \r DONE: {t} from {QUALITY}   [{s}]\x1b[0m", end='')
-MAIN_IMAGE.recheck()
+    print(f"\x1b[32m \r \r DONE: {t + 1} from {QUALITY}   [{s}]\x1b[0m", end='')
+#MAIN_IMAGE.recheck()
 # MAIN_IMAGE.a()
 # print(MAIN_IMAGE.height, MAIN_IMAGE.last_i, MAIN_IMAGE.width, MAIN_IMAGE.last_j)
 MAIN_IMAGE.save_rez(name='imp/2')

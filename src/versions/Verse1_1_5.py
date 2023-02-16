@@ -112,7 +112,7 @@ class OverlayImage:
             for j in range(self.width):
                 r, g, b, a = self.pixels[j, i]
                 if a != 0:  # if pix != None
-                    self.matrix[i][j] = 1 # замена 0 на 1
+                    self.matrix[i][j] = 1  # замена 0 на 1
 
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
@@ -136,9 +136,8 @@ class MainImage(OverlayImage):
             'RGBA', (self.width, self.height), (118, 255, 97))
         self.main_matrix = np.zeros((self.height, self.width))
         self.pixels = self.image.load()
-        self.numbers_for_matrix = 1 # if we want to numerize each image in matix, one of imgs'll be with "1", anohter with "2" and etc
 
-    def add_images(self, data, numbers=False):
+    def add_images(self, data):
         overlaying_image = Image.open('src/rezs/ready_image.png')
         x, y, over_matrix = data['x'], data['y'], data['matrix']
         ov_im_width, ov_im_height = overlaying_image.size
@@ -160,10 +159,9 @@ class MainImage(OverlayImage):
                     # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
                         # be careful there
-                        if not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
+                        if not self.main_matrix[i][j] == over_matrix[small_i][small_j] == 1:
                             if self.main_matrix[i][j] == 0:
-                                if over_matrix[small_i][small_j] > 0:
-                                    self.main_matrix[i][j] = 2
+                                self.main_matrix[i][j] = over_matrix[small_i][small_j]
 
                         else:
                             overlay = True
@@ -216,10 +214,7 @@ class MainImage(OverlayImage):
     def create_matrix(self):
         self.main_matrix = np.zeros((self.height, self.width))
         self.matrix = self.main_matrix
-        return super().create_matrix(num=2)
-    
-    def crop_matrix(self):
-        pass
+        return super().create_matrix()
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200
 # NAME = 'src/image/dog.png'

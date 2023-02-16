@@ -2,9 +2,9 @@ from Verse1_1_1 import MainImage, OverlayImage
 from Gen0 import Individ, Population
 
 def create_small_matrixes():
-    MATIX_QUANTITY = 4
+    MATRIX_QUANTITY = 10
     QUALITY = 2
-    NAME = 'src/image/dog.png'
+    NAME = 'src/image/Image.png'
     OVER_IMAGE = OverlayImage(NAME)
     OVER_IMAGE.crop()
     WIDTH, HEIGHT = OVER_IMAGE.get_data()['width'], OVER_IMAGE.get_data()['height']
@@ -12,7 +12,7 @@ def create_small_matrixes():
     print(f'WIDTH: {WIDTH}, HEIGHT: {HEIGHT}')
 
 
-    for g in range(MATIX_QUANTITY):
+    for g in range(MATRIX_QUANTITY):
         MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
         print(f'-----------------little_matrix_2x2NUM{g}-----------------')
         for t in range(QUALITY):
@@ -24,10 +24,23 @@ def create_small_matrixes():
             OVER_IMAGE.save_rez()
             # all changes. check that everyone is here
             datas = OVER_IMAGE.get_data()
-            MAIN_IMAGE.add_images(datas)
+            MAIN_IMAGE.add_images(datas, numbers=1)
+        # MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}1')
         MAIN_IMAGE.crop()
+        MAIN_IMAGE.create_matrix()
         MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
+        print(MAIN_IMAGE.height)
+        print(len(MAIN_IMAGE.main_matrix[0]))
+        make_zones(MAIN_IMAGE)
         
+def make_zones(main_image_object):
+    for i in range(len(main_image_object.main_matrix)):
+        for j in range(len(main_image_object.main_matrix[i])):
+        #     print(main_image_object.main_matrix[i][j], end='')
+
+        # print()
+            pass
+
 
 create_small_matrixes()
 BESTIES = []

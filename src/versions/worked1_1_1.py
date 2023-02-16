@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 import copy
 from random import randint, choice
+import time
 from PIL import Image
-import os
+
+
 
 
 class OverlayImage:
@@ -74,8 +76,6 @@ class OverlayImage:
         print(f'''Possible quality: {possible_quality}''')
         self.width, self.height = self.image.size  # переопределение размеров
         print(f'new width: {self.width}, new_height: {self.height}')
-        self.matrix = [[0] * self.width for _ in range(self.height)]
-
 
     def save_rez(self, name=None):
         if name == None:
@@ -107,14 +107,12 @@ class OverlayImage:
         self.pixels = self.image.load()
 
     def create_matrix(self):
-        self.pixels = self.image.load()
         # check pixels, matrix
         for i in range(self.height):
             for j in range(self.width):
                 r, g, b, a = self.pixels[j, i]
                 if a != 0:  # if pix != None
                     self.matrix[i][j] = 1  # замена 0 на 1
-
 
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
@@ -128,12 +126,8 @@ class OverlayImage:
         return rez
 
 
-# -------------------------------------------------------------------------------
-
-
 class MainImage(OverlayImage):
     def __init__(self, width, height):
-        self.path = 'src/all_images'
         self.width = width
         self.height = height
         self.image = Image.new(
@@ -143,14 +137,6 @@ class MainImage(OverlayImage):
         self.main_matrix = [
             [0 for _ in range(self.width)] for __ in range(self.height)]
         self.pixels = self.image.load()
-        self.recheck_image = OverlayImage('src/image/dog.png')
-        self.recheck_image.crop()
-        self.recheck_image.create_matrix()
-        self.recheck_image.save_rez()
-        self.all_images = []
-        self.matrixes = []
-        # for row in self.recheck_image.matrix:
-        #     print(row)
 
 
     def add_images(self, data):
@@ -160,12 +146,6 @@ class MainImage(OverlayImage):
         good_height = False
         im_qual = 0
         fail_count = 0
-        new_image = OverlayImage('src/rezs/ready_image.png')
-        if new_image.matrix not in self.matrixes:
-            self.matrixes.append(new_image.matrix)
-            self.all_images.append(new_image)
-        # if not self.recheck_images[overlaying_image]:
-        #     self.recheck_images[overlaying_image] = [data['matrix'], ]
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -207,9 +187,9 @@ class MainImage(OverlayImage):
 
     def save_rez(self, name=None):
         if name == None:
-            self.image.save('src/rezs/main_image_from_1.1.2.png')
+            self.image.save('src/rezs/main_image_from_1.1.1.png')
             # print(*self.main_matrix, sep='\n')
-            file = open('src/rezs/rezult_1.1.2.txt', 'w', encoding='utf-8')
+            file = open('src/rezs/rezult_1.1.1.txt', 'w', encoding='utf-8')
         else:
             self.image.save(f'src/rezs/{name}.png')
             # print(*self.main_matrix, sep='\n')
@@ -222,29 +202,6 @@ class MainImage(OverlayImage):
     def crop(self):
         return super().crop()
 
-    def recheck(self):
-        for i in range(self.height):
-            for j in range(self.width):
-                for recheck_image in self.all_images:
-                    overlay = False
-                    matrix_copy = copy.deepcopy(self.main_matrix)
-                    if i + recheck_image.height <= self.height and j + recheck_image.width <= self.width:
-                        for i1 in range(recheck_image.height):
-                            for j1 in range(recheck_image.width):
-                                if self.main_matrix[i + i1][j + j1] == 0:
-                                    self.main_matrix[i + i1][j + j1] += int(recheck_image.matrix[i1][j1])
-                                else:
-                                    overlay = True
-                        if not overlay:
-                            self.save_rez(name=f'{i}{j}')
-                            self.image.paste(recheck_image.image, (j, i), recheck_image.image)
-                        else:
-                            # self.main_matrix[i][j]
-
-                            self.main_matrix = matrix_copy
-    def a(self):
-        print(len(self.all_images))
-                            
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200
 # NAME = 'src/image/dog.png'

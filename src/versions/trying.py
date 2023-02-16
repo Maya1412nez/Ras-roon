@@ -1,9 +1,7 @@
 # import matplotlib.pyplot as plt
-# from mpl_toolkits.mplot3d import axes3d, Axes3D #<-- Note the capitalization! 
+# from mpl_toolkits.mplot3d import axes3d, Axes3D #<-- Note the capitalization!
 # from matplotlib import cm
 # import numpy as np
-
-
 
 
 # fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
@@ -122,7 +120,7 @@
 # class A:
 #     def met1(self):
 #         print('No')
-    
+
 #     def met2(self):
 #         self.met1()Z
 # a = A()
@@ -226,7 +224,6 @@
 # b.sound()
 
 
-
 # my_tuple = tuple(input(), list(map(int, input().split())), tuple(map(int, input().split())), tuple(map(int, input().split())))
 # n = int(input())
 # k  = int(input())
@@ -298,7 +295,6 @@
 #         #print(d[i])
 #         S += d[i][2]
 # print(S)
-
 
 
 # cache = dict()
@@ -439,9 +435,6 @@
 # print('''
 
 
-
-
-
 # ''')
 # for row in im2.matrix:
 #     print(row)
@@ -453,17 +446,239 @@
 #     c += i
 # print(c)
 
-from time import sleep
+# from time import sleep
 
-r = 150
-for i in range(r + 1):
-    n = i // 10
-    s = ""
-    for j in range(n):
-        s += "="
-        sleep(0.01)
-    s = "="*n + "-"*((r // 10)-n)
-    print(f"\x1b[32m \r DONE: {i} from {r}   [{s}]'\x1b[0m", end='')
+# r = 150
+# for i in range(r + 1):
+#     n = i // 10
+#     s = ""
+#     for j in range(n):
+#         s += "="
+#         sleep(0.01)
+#     s = "="*n + "-"*((r // 10)-n)
+#     print(f"\x1b[32m \r DONE: {i} from {r}   [{s}]'\x1b[0m", end='')
 
 
+import numpy as np
 
+# mat = [[1, 2, 3],
+#        [4, 5, 6],
+#        [7, 8, 9]]
+# print(mat)
+# print(mat[0][0], mat[1][0], mat[-1][-1])
+# print(len(mat), len(mat[0]))
+# for i in range(len(mat)):
+#     for j in range(len(mat[i])):
+#        print(mat[i][j], end=" ")
+#     print()
+# s = 0
+# for i in range(len(mat)):
+#     for j in range(len(mat[i])):
+#        s += mat[i][j]
+# print(s)
+
+# mat = np.array([[1, 2, 3],
+#        [4, 5, 6],
+#        [7, 8, 9]])
+# mat2 = mat + 1
+# mat3 = [mat, mat2]
+# if mat in mat3:
+#   print(1)
+# mat2 = np.zeros((3, 5))
+# mat3 = np.empty((5, 5))
+# mat4 = np.eye(5, 5)
+
+# # print(mat2)
+# # print(mat3)
+# # print(mat4)
+# n = 10
+# mat = np.array([
+#     [j*i for j in range(1, n + 1)] for i in range(1, 10)
+# ])
+# prost = [1]
+# for i in range(len(mat)):
+#     for j in range(len(mat[i])):
+#         if mat[i][j] not in prost:
+#             pass
+# print(1)
+
+# import matplotlib
+# import matplotlib.pyplot as plt
+# import numpy as np
+# x = np.arange(-2, 2, 0.01)
+# y = np.e ** (-x ** 2) + 0.01 * np.cos(200 * x)
+
+# fig, ax = plt.subplots()
+# ax.plot(x, y)
+# y_lst = list(y)
+
+# for i in range(1, len(y_lst)):
+#   if i + 1 <= len(y_lst):
+#     if y_lst[i] > y_lst[i - 1] and y_lst[i] > y_lst[i + 1]:
+#         plt.plot(x[i],y_lst[i], 'ro')
+# plt.show()
+
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib import cm
+# # -4.9e+03 = -4.9*10**3
+# # -4.9e-03 = -4.9*10**-3
+# x = np.arange(-5, 5, 0.1)
+# y = np.arange(-5, 6, 0.2)
+# x, y = np.meshgrid(x, y)
+# z = (x + 2*y - 7)**2 + (2*x + y - 5) ** 2
+# fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+# surf = ax.plot_surface(x, y, z, cmap=cm.plasma,
+#                        linewidth=0, antialiased=False)
+# plt.show()
+
+# x = np.arange(-5, 5, 0.1)
+# y = np.arange(-5, 6, 0.2)
+# x, y = np.meshgrid(x, y)
+# print(x)
+# print(y)
+# # z = np.zeros(x.shape)
+# # for j in range(x.shape[1]):
+# #     for i in range(y.shape[0]):
+# #         z[i][j] = x[0][j]**2 + y[i][0]**2
+# print(x.shape)
+# n = 2
+# z = np.zeros(x.shape)
+# for j in range(x.shape[1]):
+#     for i in range(y.shape[0]):
+#         xx, yy = x[0][j], y[i][0]
+#         print(xx, yy)
+#         z[i][j] =
+
+# fig, ax = plt.subplots(subplot_kw={"projection": "3d"})
+# surf = ax.plot_surface(x, y, z, cmap=cm.plasma,
+#                        linewidth=0, antialiased=False)
+# plt.show()
+
+# tab = [[0, 0, 0, 0],
+#         [1, 2, 3, 0],
+#         [4, 5, 6, 0],
+#         [7, 8, 9, 0]]
+# n = len(tab)
+# for i in range(n):
+#     if sum(tab[i]) == 0:
+#         tab1 = tab[1:]
+# print(*tab1, sep='\n')
+# for i in range(len(tab1)):
+#     for j in range
+
+# import numpy as np
+
+# np.set_printoptions(linewidth=np.inf)
+# a = np.arange(-1000, 100)
+# print(a)
+
+# a = np.zeros((200, 300))
+
+# for row in a:
+#     np.set_printoptions(linewidth=len(row))
+#     print(row)
+
+# import numpy as np
+
+# tab = np.array([[1, 2, 3],
+#         [5, 6, 7],
+#         [8, 9, 10]])
+# print(tab)
+# for i in range(len(tab)):
+#     for j in range(len(tab[i])):
+#         tab[i][j], tab[j][i] = tab[j][i], tab[i][j]
+# print(tab)
+
+# tab = np.array([[1, 2, 3],
+#         [5, 6, 7],
+#         [8, 9, 10]])
+
+# t1 = np.array([[1, 2,],
+#         [3, 4]])
+# t5 = t1.transpose()
+# t2  = np.array([[5, 6],
+#         [7, 8]])
+# t6 = t2.transpose()
+# t3 = np.hstack((t1, t2))
+# t4 = t3.transpose()
+# print(t4)
+
+
+import numpy as np
+array = np.array([[2, 0, 1, 0, 2, 0],
+                  [2, 0, 11, 0, 2, 0],
+                  [2, 0, 111, 0, 2, 0]])
+num = -1
+fill_value = 0
+
+
+def shift(arr, num, fill_value):
+    result = np.empty_like(arr)
+    if num > 0:
+        result[:num] = fill_value
+        result[num:] = arr[:-num]
+    elif num < 0:
+        result[num:] = fill_value
+        result[:num] = arr[-num:]
+    else:
+        result[:] = arr
+    # print(result)
+    return result
+
+# print(array)
+# for i in range(len(array)):
+#     # for j in range(len(array[i])):
+#     array[i][2:] = shift(array[i][2:], num, 9)
+# print(array)
+
+
+new_array = array
+# print(new_array)
+for i in range(len(array)):
+    for j in range(1, len(array[i])):
+        if array[i][j] == 2:
+            if array[i][j + num] == 0:
+                # print(array[i][1:])
+                # print()
+                # print(array[i][j:])
+                new_array[i][j - 1:] = shift(array[i][j - 1:], num, 9)
+# print(1111111)
+# print(new_array)
+# print(array[0][1:])
+
+array = np.array([[2, 0, 1, 0, 2, 0],
+                  [0, 0, 0, 0, 0, 0],
+                  [2, 0, 11, 0, 2, 0],
+                  [2, 0, 111, 0, 2, 0],
+                  [0, 0, 0, 0, 0, 0]])
+print(array)
+print(sum(sum(array)))
+del_on_y = []
+for i in range(len(array)):
+    if sum(array[i]) == 0:
+        # differ for reas if we got > 1 rows fpr delling:
+        # 0000 -> i = 0.       after del i == 0:
+        # 0100 -> i = 1                             0100 -> i = 0
+        # 0000 -> i = 2            -->              0000 -> i = 1 <- (1 = i - len(del_on_y - 1) = 2 - 1)
+        del_on_y.append(i - len(del_on_y))
+for i in range(len(del_on_y)):
+    array = np.delete(array, (del_on_y[i]), axis=0)
+print(array)
+
+# delling colums:
+print('---------------------')
+print(sum(sum(array)))
+print(len(array[0]))
+del_on_x = []
+wid = len(array[0])
+for j in range(wid-1):
+    array_copy = array.copy()
+    array = np.delete(array, (j), axis=1)
+    if sum(sum(array)) != sum(sum(array_copy)):
+        array = array_copy.copy()
+        wid -= 1
+        j -= 1
+    print(array)
+    
+print(del_on_x)
