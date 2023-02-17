@@ -4,6 +4,7 @@ from random import randint, choice
 import time
 from PIL import Image
 import numpy as np
+from Funcs import del_empty_cols, del_empty_rows
 
 
 class OverlayImage:
@@ -21,7 +22,7 @@ class OverlayImage:
         # создание матрицы с нулями
         self.matrix = np.zeros((self.height, self.width))
 
-    def crop(self):
+    def crop_image(self):
         image_square = 0
         lower_right_coord = [None, None]  # lower right - L
         upper_left_coord = [None, None]  # upper left - U:
@@ -112,7 +113,7 @@ class OverlayImage:
             for j in range(self.width):
                 r, g, b, a = self.pixels[j, i]
                 if a != 0:  # if pix != None
-                    self.matrix[i][j] = 1 # замена 0 на 1
+                    self.matrix[i][j] = 1  # замена 0 на 1
 
     def get_data(self):
         # return f'{self.image} {self.x} {self.y} {self.matrix}'
@@ -136,7 +137,8 @@ class MainImage(OverlayImage):
             'RGBA', (self.width, self.height), (118, 255, 97))
         self.main_matrix = np.zeros((self.height, self.width))
         self.pixels = self.image.load()
-        self.numbers_for_matrix = 1 # if we want to numerize each image in matix, one of imgs'll be with "1", anohter with "2" and etc
+        # if we want to numerize each image in matix, one of imgs'll be with "1", anohter with "2" and etc
+        self.numbers_for_matrix = 1
 
     def add_images(self, data, numbers=False):
         overlaying_image = Image.open('src/rezs/ready_image.png')
@@ -145,6 +147,8 @@ class MainImage(OverlayImage):
         good_height = False
         im_qual = 0
         fail_count = 0
+        if numbers:
+                self.numbers_for_matrix += 1
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -198,28 +202,29 @@ class MainImage(OverlayImage):
         for row in self.main_matrix:
 
             np.set_printoptions(linewidth=2000)
-            file.write(str(row))
-            print(row)
+            file.write(f'[{str(row)}],')
+            # print(row)
             file.write('\n')
-        #print(self.main_matrix)
+        # print(self.main_matrix)
 
-    def crop(self):
-        return super().crop()
+    def crop_image(self):
+        return super().crop_image()
 
-    def recreate_matrix(self):
-        for i in range(len(self.main_matrix)):
-            if sum(self.main_matrix[i]) == 0:
-                self.main_matrix = self.main_matrix[1:]
-        for j in range(len(self.main_matrix[0])):
-            pass
+    # def recreate_matrix(self):
+    #     for i in range(len(self.main_matrix)):
+    #         if sum(self.main_matrix[i]) == 0:
+    #             self.main_matrix = self.main_matrix[1:]
+    #     for j in range(len(self.main_matrix[0])):
+    #         pass
 
-    def create_matrix(self):
-        self.main_matrix = np.zeros((self.height, self.width))
-        self.matrix = self.main_matrix
-        return super().create_matrix(num=2)
-    
     def crop_matrix(self):
-        pass
+        self.image.crop()
+        self.width, self.height = self.image.size  # переопределение размеров
+        self.main_matrix = del_empty_rows(self.main_matrix)
+        self.main_matrix = del_empty_cols(self.main_matrix)
+        if len(self.main_matrix) != self.width or len(self.main_matrix[0]) != self.height:
+            print('IMAGE != MATRIX!!!!')
+            print('make coord for second image on matrix and refactor image, using this coords, width, height, etc')
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200
 # NAME = 'src/image/dog.png'
