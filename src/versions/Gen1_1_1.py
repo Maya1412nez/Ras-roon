@@ -6,7 +6,7 @@ def create_small_matrixes():
     QUALITY = 2
     NAME = 'src/image/Image.png'
     OVER_IMAGE = OverlayImage(NAME)
-    OVER_IMAGE.crop()
+    OVER_IMAGE.crop_image()
     WIDTH, HEIGHT = OVER_IMAGE.get_data()['width'], OVER_IMAGE.get_data()['height']
     WIDTH, HEIGHT = max(WIDTH, HEIGHT) * 2, max(WIDTH, HEIGHT) * 2
     print(f'WIDTH: {WIDTH}, HEIGHT: {HEIGHT}')
@@ -18,19 +18,15 @@ def create_small_matrixes():
         for t in range(QUALITY):
             # all changes. check that everyone is here
             OVER_IMAGE = OverlayImage(NAME)
-            OVER_IMAGE.crop()
+            OVER_IMAGE.crop_image()
             OVER_IMAGE.edit_random(WIDTH, HEIGHT)
             OVER_IMAGE.create_matrix()
             OVER_IMAGE.save_rez()
             # all changes. check that everyone is here
             datas = OVER_IMAGE.get_data()
             MAIN_IMAGE.add_images(datas, numbers=1)
-        # MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}1')
-        MAIN_IMAGE.crop()
-        MAIN_IMAGE.create_matrix()
+        MAIN_IMAGE.crop_matrix()
         MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
-        print(MAIN_IMAGE.height)
-        print(len(MAIN_IMAGE.main_matrix[0]))
         make_zones(MAIN_IMAGE)
         
 def make_zones(main_image_object):

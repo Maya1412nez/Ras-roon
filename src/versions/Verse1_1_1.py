@@ -167,7 +167,7 @@ class MainImage(OverlayImage):
                         if not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
                             if self.main_matrix[i][j] == 0:
                                 if over_matrix[small_i][small_j] > 0:
-                                    self.main_matrix[i][j] = 2
+                                    self.main_matrix[i][j] = self.numbers_for_matrix
 
                         else:
                             overlay = True
