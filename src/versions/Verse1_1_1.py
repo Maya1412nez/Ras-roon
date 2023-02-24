@@ -158,9 +158,9 @@ class MainImage(OverlayImage):
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
             overlay = False
-            over_matrix[0][0] = 9  # helping marks
+            over_matrix[0][0] =  -1 # helping marks
             # helping marks
-            over_matrix[ov_im_height - 1][ov_im_width - 1] = 8
+            over_matrix[ov_im_height - 1][ov_im_width - 1] = -1
             for i in range(self.height):
                 for j in range(self.width):
                     # ENTER
@@ -169,10 +169,12 @@ class MainImage(OverlayImage):
                     # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
                         # be careful there
-                        if not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
+                        if over_matrix[small_i][small_j] < 0:
+                            self.main_matrix[i][j] = -self.numbers_for_matrix
+                        elif not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
                             if self.main_matrix[i][j] == 0:
                                 if over_matrix[small_i][small_j] > 0:
-                                    self.main_matrix[i][j] = self.numbers_for_matrix
+                                        self.main_matrix[i][j] = self.numbers_for_matrix
 
                         else:
                             overlay = True
