@@ -88,6 +88,11 @@ class OverlayImage:
         #     self.image.save(f'src/rezs/{name}.png')
         #     self.demo_image.save(f'src/rezs/{name}.png')
 
+    def set_parametr(self, degr=None):
+        if degr:
+            self.degrees = degr
+            self.image = self.image.rotate(self.degrees, expand=True)  # поворот PNG изображения
+
     def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
         self.degrees = choice(flip_degrees)  # выбор градуса поворота
@@ -132,7 +137,7 @@ class OverlayImage:
 
 
 class MainImage(OverlayImage):
-    def __init__(self, width, height):
+    def __init__(self, width, height, name):
         self.width = width
         self.height = height
         self.image = Image.new(
@@ -145,6 +150,7 @@ class MainImage(OverlayImage):
         self.numbers_for_matrix = 1
         self.dict_of_numbers_and_degrees = {}
         self.coords = []
+        self.file_name = name
 
     def add_images(self, data, numbers=False):
         overlaying_image = Image.open('src/rezs/ready_image.png')
@@ -158,9 +164,9 @@ class MainImage(OverlayImage):
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
             overlay = False
-            over_matrix[0][0] =  -1 # helping marks
+            # over_matrix[0][0] =  -self.numbers_for_matrix # helping marks
             # helping marks
-            over_matrix[ov_im_height - 1][ov_im_width - 1] = -1
+            # over_matrix[ov_im_height - 1][ov_im_width - 1] = -self.numbers_for_matrix 
             for i in range(self.height):
                 for j in range(self.width):
                     # ENTER
@@ -169,9 +175,7 @@ class MainImage(OverlayImage):
                     # Be careful when reading matrix with marks!!
                     if ov_im_height > small_i >= 0 and ov_im_width > small_j >= 0:
                         # be careful there
-                        if over_matrix[small_i][small_j] < 0:
-                            self.main_matrix[i][j] = -self.numbers_for_matrix
-                        elif not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
+                        if not self.main_matrix[i][j] >= over_matrix[small_i][small_j] == 1:
                             if self.main_matrix[i][j] == 0:
                                 if over_matrix[small_i][small_j] > 0:
                                         self.main_matrix[i][j] = self.numbers_for_matrix
@@ -221,6 +225,16 @@ class MainImage(OverlayImage):
         self.crop_image()
         self.width, self.height = len(self.main_matrix), len(self.main_matrix[0])
         print(f'NEW WIDTH {self.width} NEW HEIGHT {self.height}')
+        self.image = Image.new('RGBA', (self.width, self.height), (0, 0, 0, 0))
+        print(888888888888888888, self.dict_of_numbers_and_degrees)
+        for number, degrees in self.dict_of_numbers_and_degrees.items():
+            print(f'NUMBER: {number}, DEGREES: {degrees}')
+            print(get_upleft_index(self.main_matrix, number))
+            over_image = OverlayImage(self.file_name)
+            over_image.crop_image()
+            over_image.set_parametr(degr=degrees)
+            over_image.image.show()
+
 
 
     def check_quality(self): # this method for delling wrong matrixes with few elements

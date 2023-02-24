@@ -47,13 +47,12 @@ def get_upleft_index(mat, finding_value):
     if left_ind == left_ind_none:
         return None
     return left_ind
-    left_ind = int(left_ind[0]), int(left_ind[1]) # x, y
 
-mat = np.array([
-    [5, 2, 2, 0],
-    [0, 2, 4, 0],
-    [0, 9, 3, 0],
-    [2, 1, 0, 5]
-])
-print(get_upleft_index(mat, 5))
+# mat = np.array([
+#     [5, 2, 2, 0],
+#     [0, 2, 4, 0],
+#     [0, 9, 3, 0],
+#     [2, 1, 0, 5]
+# ])
+# print(get_upleft_index(mat, 5))
 

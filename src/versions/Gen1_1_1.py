@@ -2,7 +2,7 @@ from Verse1_1_1 import MainImage, OverlayImage
 from Gen0 import Individ, Population
 
 def create_small_matrixes():
-    MATRIX_QUANTITY = 3
+    MATRIX_QUANTITY = 1
     QUALITY = 2
     NAME = 'src/image/fork.png'
     OVER_IMAGE = OverlayImage(NAME)
@@ -13,7 +13,7 @@ def create_small_matrixes():
 
 
     for g in range(MATRIX_QUANTITY):
-        MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
+        MAIN_IMAGE = MainImage(WIDTH, HEIGHT, NAME)
         print(f'-----------------little_matrix_2x2NUM{g}-----------------')
         for t in range(QUALITY):
             # all changes. check that everyone is here
