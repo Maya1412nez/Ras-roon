@@ -35,3 +35,27 @@ def del_empty_cols(array):
 
     array = np.delete(array, (found), axis=1)
     return array 
+
+
+def get_upleft_index(mat, finding_value):
+    left_ind_none = (99999999999999999999999, 999999999999999999999999999)
+    left_ind = left_ind_none
+    for i in range(len(mat)):
+        if finding_value in mat[i]:
+            if i < left_ind[0]:
+                left_ind = i, left_ind[1]
+            if mat[i][finding_value] < left_ind[1]:
+                left_ind = left_ind[0], mat[i][finding_value]
+    if left_ind == left_ind_none:
+        return None
+    left_ind = int(left_ind[1]), int(left_ind[0]) # x, y
+    return left_ind
+
+mat = np.array([
+    [0, 2, 0, 0],
+    [0, 2, 0, 0],
+    [0, 1, 0, 2],
+    [2, 1, 0, 0]
+])
+print(get_upleft_index(mat, 1))
+

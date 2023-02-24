@@ -4,7 +4,7 @@ from random import randint, choice
 import time
 from PIL import Image
 import numpy as np
-from Funcs import del_empty_cols, del_empty_rows
+from Funcs import del_empty_cols, del_empty_rows, get_upleft_index
 
 
 class OverlayImage:
@@ -21,9 +21,12 @@ class OverlayImage:
         self.pixels = self.image.load()
         # создание матрицы с нулями
         self.matrix = np.zeros((self.height, self.width))
+        self.degrees = None
 
     def crop_image(self):
         image_square = 0
+        self.width, self.height = self.image.size
+        self.pixels = self.image.load()
         lower_right_coord = [None, None]  # lower right - L
         upper_left_coord = [None, None]  # upper left - U:
         # _  _  U  _  _  1  _  _  _  _  _
@@ -72,7 +75,7 @@ class OverlayImage:
         self.demo_image = self.demo_image.crop(
             (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0], lower_right_coord[1]))
         self.image = self.image.crop(
-            (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0], lower_right_coord[1]))
+            (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0] +1, lower_right_coord[1] +1))
         print(f'''Possible quality: {possible_quality}''')
         self.width, self.height = self.image.size  # переопределение размеров
         print(f'new width: {self.width}, new_height: {self.height}')
@@ -87,12 +90,12 @@ class OverlayImage:
 
     def edit_random(self, main_image_width, main_image_height):
         flip_degrees = [0, 90, 180, 270]  # список градусов поворота
-        degrees = choice(flip_degrees)  # выбор градуса поворота
+        self.degrees = choice(flip_degrees)  # выбор градуса поворота
 
         self.image = self.image.rotate(
-            degrees, expand=True)  # поворот PNG изображения
+            self.degrees, expand=True)  # поворот PNG изображения
         self.demo_image = self.demo_image.rotate(
-            degrees,
+            self.degrees,
             expand=True)  # поворот того же изображения, но наложенного на зеленый фон (r = 118 and g = 255 and b = 97)
         self.width, self.height = self.image.size  # переопределение размеров
         print(self.image.size)
@@ -102,7 +105,7 @@ class OverlayImage:
         # x, y = 10, (self.main_image_height - self.height)
         print(
             f'''New random coordinates: {self.x, self.y}
-                New random flip degrees: {degrees}
+                New random flip degrees: {self.degrees}
                 ''')
         self.pixels = self.image.load()
 
@@ -124,6 +127,7 @@ class OverlayImage:
         rez['height'] = self.height
         rez['matrix'] = self.matrix
         rez['width'] = self.width
+        rez['degrees'] = self.degrees
         return rez
 
 
@@ -139,16 +143,17 @@ class MainImage(OverlayImage):
         self.pixels = self.image.load()
         # if we want to numerize each image in matix, one of imgs'll be with "1", anohter with "2" and etc
         self.numbers_for_matrix = 1
+        self.dict_of_numbers_and_degrees = {}
+        self.coords = []
 
     def add_images(self, data, numbers=False):
         overlaying_image = Image.open('src/rezs/ready_image.png')
-        x, y, over_matrix = data['x'], data['y'], data['matrix']
+        x, y, over_matrix, degrees = data['x'], data['y'], data['matrix'], data['degrees']
         ov_im_width, ov_im_height = overlaying_image.size
         good_height = False
         im_qual = 0
         fail_count = 0
-        if numbers:
-                self.numbers_for_matrix += 1
+        self.coords.append((y, x))
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -177,6 +182,9 @@ class MainImage(OverlayImage):
                 good_height = True
                 im_qual += 1
                 # fail_count = 0
+                if numbers:
+                        self.dict_of_numbers_and_degrees[self.numbers_for_matrix] = degrees
+                        self.numbers_for_matrix += 1
             else:
                 fail_count += 1
 
@@ -200,15 +208,24 @@ class MainImage(OverlayImage):
             file = open(f'src/rezs/{name}.txt', 'w', encoding='utf-8')
 
         for row in self.main_matrix:
-
             np.set_printoptions(linewidth=2000)
             file.write(f'[{str(row)}],')
             # print(row)
             file.write('\n')
+        file.write(str(self.dict_of_numbers_and_degrees))
         # print(self.main_matrix)
 
-    def crop_image(self):
-        return super().crop_image()
+    def recreate_image(self):
+        self.crop_image()
+        self.width, self.height = len(self.main_matrix), len(self.main_matrix[0])
+        print(f'NEW WIDTH {self.width} NEW HEIGHT {self.height}')
+
+
+    def check_quality(self): # this method for delling wrong matrixes with few elements
+        for matix_num, degrees in self.dict_of_numbers_and_degrees.items():
+            if get_upleft_index(self.main_matrix, matix_num) == None:
+                pass 
+            
 
     # def recreate_matrix(self):
     #     for i in range(len(self.main_matrix)):
