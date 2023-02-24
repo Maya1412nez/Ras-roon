@@ -42,20 +42,18 @@ def get_upleft_index(mat, finding_value):
     left_ind = left_ind_none
     for i in range(len(mat)):
         if finding_value in mat[i]:
-            if i < left_ind[0]:
-                left_ind = i, left_ind[1]
-            if mat[i][finding_value] < left_ind[1]:
-                left_ind = left_ind[0], mat[i][finding_value]
+            left_ind = (i, (np.where(mat[i] == finding_value)[0][0]))
+            break
     if left_ind == left_ind_none:
         return None
-    left_ind = int(left_ind[1]), int(left_ind[0]) # x, y
     return left_ind
+    left_ind = int(left_ind[0]), int(left_ind[1]) # x, y
 
 mat = np.array([
-    [0, 2, 0, 0],
-    [0, 2, 0, 0],
-    [0, 1, 0, 2],
-    [2, 1, 0, 0]
+    [5, 2, 2, 0],
+    [0, 2, 4, 0],
+    [0, 9, 3, 0],
+    [2, 1, 0, 5]
 ])
-print(get_upleft_index(mat, 1))
+print(get_upleft_index(mat, 5))
 
