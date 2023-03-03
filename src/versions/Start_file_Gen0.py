@@ -1,22 +1,19 @@
 from Gen0 import Individ, Population
 
-
-IND_LENTH = 10
-POP_LENTH = 60
-POP_QUANT = 6
+POP_QUANT = 6 # количество поколений
 
 BESTIES = []
-population = Population()
-population.create_new()
+population = Population() 
+population.create_new() # создание первой популяции и первых индивидоа
 
-for i in range(POP_QUANT):
-    population.population_fight()
-    population.create_childs()
-    population.print_data(all=1)
-    BESTIES.append(population.get_best())
+for i in range(POP_QUANT): # цикл смены поколений
+    population.population_fight() # "бои" / попарное сравнение
+    population.create_childs() # создание потомства
+    population.print_data(all=1) # вывод данных о популяции
+    BESTIES.append(population.get_best()) # добавление лучшего индивида в список лучших 
     print('POPULATION QUALITY:', population.get_pop_quality()) # make grafic
     print('------------NEW GENERATION----------------')
-    population = population.create_pop_from_childs()
+    population = population.create_pop_from_childs() # Переинициализация потомков во взрослых
 
 # for i in range(len(BESTIES)):
 #     print(BESTIES[i].get_data())
