@@ -128,8 +128,8 @@ class Population:
 try:
     from Gen1_1_1 import IND_LENTH, POP_LENTH, POP_QUANT
 except:
-    IND_LENTH = 10
-    POP_LENTH = 60
+    IND_LENTH = 4
+    POP_LENTH = 6
     POP_QUANT = 6
 # IND_LENTH = 10
 # POP_LENTH = 60

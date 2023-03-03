@@ -2,9 +2,9 @@
 from Verse1_1_4 import MainImage, OverlayImage
 from time import sleep
 
-WIDTH, HEIGHT = 200, 200
-QUALITY = 30
-NAME = 'src/image/dog.png'
+WIDTH, HEIGHT = 150, 150
+QUALITY = 4
+NAME = 'src/image/Image.png'
 
 MAIN_IMAGE = MainImage(WIDTH, HEIGHT)
 

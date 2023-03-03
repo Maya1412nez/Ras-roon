@@ -2,13 +2,15 @@ from Verse1_1_1 import MainImage, OverlayImage
 from Gen0 import Individ, Population
 
 def create_small_matrixes():
-    MATRIX_QUANTITY = 3
-    QUALITY = 2
-    NAME = 'src/image/fork.png'
+    quality_list = open('src/rezs/Plus_evolution.txt', 'w', encoding='utf-8')
+    MATRIX_QUANTITY = 40
+    QUALITY = 10
+    MATRIX_SIZE_COEF = 2
+    NAME = 'src/image/Image.png'
     OVER_IMAGE = OverlayImage(NAME)
     OVER_IMAGE.crop_image()
     WIDTH, HEIGHT = OVER_IMAGE.get_data()['width'], OVER_IMAGE.get_data()['height']
-    WIDTH, HEIGHT = max(WIDTH, HEIGHT) * 2, max(WIDTH, HEIGHT) * 2
+    WIDTH, HEIGHT = max(WIDTH, HEIGHT) * MATRIX_SIZE_COEF, max(WIDTH, HEIGHT) * MATRIX_SIZE_COEF
     print(f'WIDTH: {WIDTH}, HEIGHT: {HEIGHT}')
 
 
@@ -27,7 +29,8 @@ def create_small_matrixes():
             MAIN_IMAGE.add_images(datas, numbers=1)
         MAIN_IMAGE.crop_matrix()
         MAIN_IMAGE.recreate_image()
-        MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
+        quality_list.write(f' №{g} qual = {MAIN_IMAGE.get_quality()} \n')
+        MAIN_IMAGE.save_rez(f'Plus_evolution/little_matrix_2x2NUM{g}')
         # make_zones(MAIN_IMAGE)
         
 # def make_zones(main_image_object):

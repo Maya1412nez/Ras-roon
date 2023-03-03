@@ -57,3 +57,36 @@ mat = np.array([
 ])
 print(get_upleft_index(mat, 5))
 
+import numpy as np 
+from matplotlib import pyplot as plt 
+import collections
+
+data_file = open('src/rezs/quality.txt', 'r', encoding='utf-8')
+i = 0
+x, x1 = [], []
+y, y1 = [], []
+s = 0
+dict_x_y = dict()
+for row in data_file:
+    value = float(row.split()[9])
+    x.append(i)
+    y.append(value)
+    i += 1
+    s += int(row.split()[3])
+    if not row.split()[3] in dict_x_y:
+        dict_x_y[row.split()[3]] = []
+    dict_x_y[row.split()[3]].append(value)
+od = collections.OrderedDict(sorted(dict_x_y.items()))
+print(od)
+for x, y in od.items():
+    x1.append(x)
+    y1.append(sum(y) / len(y))
+print(x1)
+print(y1)
+
+
+plt.title("Зависимость среднего качества от количества") 
+plt.xlabel("коэфициент качества") 
+plt.ylabel("количества") 
+plt.plot(x1,y1) 
+plt.show()
