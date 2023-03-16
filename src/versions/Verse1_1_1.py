@@ -227,7 +227,15 @@ class MainImage(OverlayImage):
         for matix_num, degrees in self.dict_of_numbers_and_degrees.items():
             if get_upleft_index(self.main_matrix, matix_num) == None:
                 pass 
-            
+
+    def get_quality(self):
+        quality = 0
+        square = len(self.main_matrix) * len(self.main_matrix[0])
+        for i in range(len(self.main_matrix)):
+            for j in range(len(self.main_matrix[i])):
+                if self.main_matrix[i][j] != 0:
+                    quality += 1
+        return f'filled_pixel/square= {quality / square}'
 
     # def recreate_matrix(self):
     #     for i in range(len(self.main_matrix)):

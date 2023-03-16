@@ -48,6 +48,7 @@ class Population:
         shuffle(order)
         winner_list = []
         for i, j in pairwise(order):
+            print(i, j)
             if j != None:
                 i_winner = self.local_fight(i, j)
                 obj_winner = self.individs[i_winner]
