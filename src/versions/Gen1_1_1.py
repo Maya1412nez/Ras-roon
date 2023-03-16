@@ -1,14 +1,14 @@
 from Verse1_1_1 import MainImage, OverlayImage
-from Gen0 import Individ, Population
 
 def create_small_matrixes():
-    MATRIX_QUANTITY = 3
-    QUALITY = 2
-    NAME = 'src/image/fork.png'
+    MATRIX_QUANTITY = 1
+    QUALITY = 30
+    NAME = 'src/image/Image.png'
     OVER_IMAGE = OverlayImage(NAME)
     OVER_IMAGE.crop_image()
     WIDTH, HEIGHT = OVER_IMAGE.get_data()['width'], OVER_IMAGE.get_data()['height']
-    WIDTH, HEIGHT = max(WIDTH, HEIGHT) * 2, max(WIDTH, HEIGHT) * 2
+    # WIDTH, HEIGHT = max(WIDTH, HEIGHT) * QUALITY, max(WIDTH, HEIGHT) * QUALITY
+    WIDTH, HEIGHT = 200, 150
     print(f'WIDTH: {WIDTH}, HEIGHT: {HEIGHT}')
 
 
@@ -26,7 +26,7 @@ def create_small_matrixes():
             datas = OVER_IMAGE.get_data()
             MAIN_IMAGE.add_images(datas, numbers=1)
         MAIN_IMAGE.crop_matrix()
-        MAIN_IMAGE.recreate_image()
+        # MAIN_IMAGE.recreate_image()
         MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
         # make_zones(MAIN_IMAGE)
         
@@ -41,6 +41,3 @@ def create_small_matrixes():
 
 create_small_matrixes()
 BESTIES = []
-population = Population()
-population.create_new()
-    

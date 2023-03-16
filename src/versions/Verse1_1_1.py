@@ -237,12 +237,13 @@ class MainImage(OverlayImage):
     #         pass
 
     def crop_matrix(self):
-        self.image.crop()
+        self.crop_image()
         self.width, self.height = self.image.size  # переопределение размеров
         self.main_matrix = del_empty_rows(self.main_matrix)
         self.main_matrix = del_empty_cols(self.main_matrix)
-        if len(self.main_matrix) != self.width or len(self.main_matrix[0]) != self.height:
+        if len(self.main_matrix) != self.height or len(self.main_matrix[0]) != self.width:
             print('IMAGE != MATRIX!!!!')
+            print(len(self.main_matrix), self.width, len(self.main_matrix[0]), self.height)
             print('make coord for second image on matrix and refactor image, using this coords, width, height, etc')
 # WIDTH, HEIGHT = 800, 500
 # QUALITY = 200
