@@ -4,6 +4,7 @@ from Funcs import pairwise
 def create_small_matrixes():
     MATRIX_QUANTITY = 9
     QUALITY = 30
+    list_of_objects = []
     NAME = 'src/image/Image.png'
     OVER_IMAGE = OverlayImage(NAME)
     OVER_IMAGE.crop_image()
@@ -32,9 +33,14 @@ def create_small_matrixes():
         MAIN_IMAGE.save_rez(f'little_matrixs/little_matrix_2x2NUM{g}')
         list_of_objects.append(MAIN_IMAGE)
         # make_zones(MAIN_IMAGE)
+<<<<<<< Updated upstream
     return list_of_objects
 
         
+=======
+        list_of_objects.append(MAIN_IMAGE)
+    return list_of_objects
+>>>>>>> Stashed changes
 # def make_zones(main_image_object):
 #     for i in range(len(main_image_object.main_matrix)):
 #         for j in range(len(main_image_object.main_matrix[i])):
@@ -47,6 +53,7 @@ def create_small_matrixes():
 list_of_objects = create_small_matrixes()
 BESTIES = []
 
+<<<<<<< Updated upstream
 
 def fight(list_of_objects):
     # for i in range(len(list_of_objects)):
@@ -72,3 +79,9 @@ def local_fight(list_of_objects, i, j):
     
 print('--------------------------FIGHT--------------------------')
 fight(list_of_objects)
+=======
+def fight():
+    for i in range(len(list_of_objects)):
+        IMAGE = list_of_objects[i]
+        print(IMAGE.)
+>>>>>>> Stashed changes
