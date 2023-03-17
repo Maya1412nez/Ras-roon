@@ -8,16 +8,16 @@ from Funcs import del_empty_cols, del_empty_rows, get_upleft_index
 
 
 class OverlayImage:
-    def __init__(self, image_name):
-        self.image = Image.open(image_name)
+    def __init__(self, image_name, its_image=None):
+        if image_name:
+            self.image = Image.open(image_name)
+        if its_image:
+            self.image = its_image
         self.width, self.height = self.image.size
         self.x, self.y = 0, 0
 
         print(f'''Start image size:
                 Width: {self.width} Height: {self.height}''')
-        self.demo_image = Image.new('RGB', (self.width, self.height),
-                                    (118, 255, 97))
-        self.demo_image.paste(self.image, (0, 0), self.image)
         self.pixels = self.image.load()
         # создание матрицы с нулями
         self.matrix = np.zeros((self.height, self.width))
@@ -72,8 +72,6 @@ class OverlayImage:
 
         # ---maximum possible quality of small images in big main image---
         possible_quality = (1200 * 700) // image_square
-        self.demo_image = self.demo_image.crop(
-            (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0], lower_right_coord[1]))
         self.image = self.image.crop(
             (upper_left_coord[0], upper_left_coord[1], lower_right_coord[0] +1, lower_right_coord[1] +1))
         print(f'''Possible quality: {possible_quality}''')
@@ -83,7 +81,6 @@ class OverlayImage:
     def save_rez(self, name=None):
         if name == None:
             self.image.save('src/rezs/image.png')
-            self.demo_image.save('src/rezs/demo_image.png')
         # else:
         #     self.image.save(f'src/rezs/{name}.png')
         #     self.demo_image.save(f'src/rezs/{name}.png')
@@ -94,9 +91,6 @@ class OverlayImage:
 
         self.image = self.image.rotate(
             self.degrees, expand=True)  # поворот PNG изображения
-        self.demo_image = self.demo_image.rotate(
-            self.degrees,
-            expand=True)  # поворот того же изображения, но наложенного на зеленый фон (r = 118 and g = 255 and b = 97)
         self.width, self.height = self.image.size  # переопределение размеров
         print(self.image.size)
         self.x, self.y = (randint(0, main_image_width - self.width)
@@ -129,16 +123,27 @@ class OverlayImage:
         rez['width'] = self.width
         rez['degrees'] = self.degrees
         return rez
+    
+    def get_quality(self):
+        quality = 0
+        square = len(self.main_matrix) * len(self.main_matrix[0])
+        for i in range(len(self.main_matrix)):
+            for j in range(len(self.main_matrix[i])):
+                if self.main_matrix[i][j] != 0:
+                    quality += 1
+        return f'filled_pixel/square= {quality / square}'
 
 
 class MainImage(OverlayImage):
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.image = Image.new(
-            'RGBA', (self.width, self.height), (0, 0, 0, 0))
-        self.demo_image = Image.new(
-            'RGBA', (self.width, self.height), (118, 255, 97))
+    def __init__(self, width=None, height=None, its_image=False):
+        if its_image:
+            self.image = its_image
+            self.width, self.height = self.image.size
+        else:
+            self.width = width
+            self.height = height
+            self.image = Image.new(
+                'RGBA', (self.width, self.height), (0, 0, 0, 0))
         self.main_matrix = np.zeros((self.height, self.width))
         self.pixels = self.image.load()
         # if we want to numerize each image in matix, one of imgs'll be with "1", anohter with "2" and etc
@@ -146,7 +151,7 @@ class MainImage(OverlayImage):
         self.dict_of_numbers_and_degrees = {}
         self.coords = []
 
-    def add_images(self, data, numbers=False):
+    def add_images(self, data, numbers=False, side='y', step=10):
         overlaying_image = Image.open('src/rezs/ready_image.png')
         x, y, over_matrix, degrees = data['x'], data['y'], data['matrix'], data['degrees']
         ov_im_width, ov_im_height = overlaying_image.size
@@ -154,6 +159,7 @@ class MainImage(OverlayImage):
         im_qual = 0
         fail_count = 0
         self.coords.append((y, x))
+        self.summary_step = 0
 
         while not good_height and y >= 0:
             matrix_copy = copy.deepcopy(self.main_matrix)
@@ -191,7 +197,11 @@ class MainImage(OverlayImage):
                 fail_count += 1
 
                 self.main_matrix = matrix_copy
-                y -= 10
+                if side == 'y':
+                    y -= step
+                elif side == 'x':
+                    x -= step
+                self.summary_step += step
 
         print('DONE!')
 
@@ -227,6 +237,9 @@ class MainImage(OverlayImage):
         for matix_num, degrees in self.dict_of_numbers_and_degrees.items():
             if get_upleft_index(self.main_matrix, matix_num) == None:
                 pass 
+    def create_matrix(self):
+        self.matrix = self.main_matrix
+        return super().create_matrix()
 
     def get_quality(self):
         quality = 0
@@ -236,6 +249,7 @@ class MainImage(OverlayImage):
                 if self.main_matrix[i][j] != 0:
                     quality += 1
         return f'filled_pixel/square= {quality / square}'
+    
 
     # def recreate_matrix(self):
     #     for i in range(len(self.main_matrix)):
