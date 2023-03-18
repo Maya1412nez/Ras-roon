@@ -1,5 +1,5 @@
 from Verse1_1_1 import MainImage, OverlayImage
-from Funcs import pairwise, concatenate_images
+from Funcs import pairwise, concatenate_images, concatenate_matrixes, best_concatenate_images
 from time import sleep
 from random import *
 
@@ -101,36 +101,39 @@ def create_child(list_of_parents, i, j, side=None):
     parent1_image, parent2_image = parent1_obj.image, parent2_obj.image
     parent1_image.show()
     parent2_image.show()
-    child_image_up = concatenate_images(parent1_image, parent2_image, side='up')[0]
-    child_image_down = concatenate_images(parent1_image, parent2_image, side='down')[0]
-    child_image_right = concatenate_images(parent1_image, parent2_image, side='right')[0]
-    child_image_left = concatenate_images(parent1_image, parent2_image, side='left')[0]
+    # child_image_up = concatenate_images(parent1_image, parent2_image, side='up')[0]
+    # child_image_down = concatenate_images(parent1_image, parent2_image, side='down')[0]
+    # child_image_right = concatenate_images(parent1_image, parent2_image, side='right')[0]
+    # child_image_left = concatenate_images(parent1_image, parent2_image, side='left')[0]
 
-    child_obj_up = MainImage(its_image=child_image_up)
-    child_obj_down = MainImage(its_image=child_image_down)
-    child_obj_right = MainImage(its_image=child_image_right)
-    child_obj_left = MainImage(its_image=child_image_left)
+    # child_obj_up = MainImage(its_image=child_image_up)
+    # child_obj_down = MainImage(its_image=child_image_down)
+    # child_obj_right = MainImage(its_image=child_image_right)
+    # child_obj_left = MainImage(its_image=child_image_left)
 
-    quality_up = child_obj_up.get_quality()
-    quality_down = child_obj_down.get_quality()
-    quality_right = child_obj_right.get_quality()
-    quality_left = child_obj_left.get_quality()
+    # quality_up = child_obj_up.get_quality()
+    # quality_down = child_obj_down.get_quality()
+    # quality_right = child_obj_right.get_quality()
+    # quality_left = child_obj_left.get_quality()
     
-    if side == 'up':
-        return child_obj_up
-    elif side == 'down':
-        return child_obj_down
-    elif side == 'right':
-        return child_obj_right
-    elif side == 'left':
-        return child_obj_left
+    # if side == 'up':
+    #     return child_obj_up
+    # elif side == 'down':
+    #     return child_obj_down
+    # elif side == 'right':
+    #     return child_obj_right
+    # elif side == 'left':
+    #     return child_obj_left
 
-    if max([quality_up, quality_down, quality_right, quality_left]) == quality_up:
-        return child_obj_up
-    if max([quality_up, quality_down, quality_right, quality_left]) == quality_down:
-        return child_obj_down
-    if max([quality_up, quality_down, quality_right, quality_left]) == quality_right:
-        return child_obj_right
-    return child_obj_left
+    # if max([quality_up, quality_down, quality_right, quality_left]) == quality_up:
+    #     return child_obj_up
+    # if max([quality_up, quality_down, quality_right, quality_left]) == quality_down:
+    #     return child_obj_down
+    # if max([quality_up, quality_down, quality_right, quality_left]) == quality_right:
+    #     return child_obj_right
+    # return child_obj_left
+    child = concatenate_matrixes(parent1_obj, parent2_obj, 'up')
+    child.save_rez('/children/first')
+
 
 create_children(list_of_objects)

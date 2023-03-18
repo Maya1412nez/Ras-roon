@@ -117,9 +117,44 @@ def image_to_obj(image):
     return obj
 
 
-def concatenate_matrixes(obj1, obj2, x, y, sidik):
-    data = {'x': x, 'y': y, 'matrix': obj2.matrix,
-            'degrees': 'not that method, its concatenate'}
-    obj1.add_images(data, side=sidik, step=1)
-    step = obj1.summary_step
-    return obj1
+def concatenate_matrixes(obj1, obj2, sidik, x=0, y=0):
+    # width, height, = obj1.image.size
+    # width1, height1 = obj2.image.size
+    # width, height = max(width, width1), max(height, height1)
+    # if sidik == 'up' or sidik == 'down': 
+    #     x, y = 0, height
+    # if sidik == 'left' or sidik == 'right':
+    #     x, y = width, 0
+    # data = {'x': x, 'y': y, 'matrix': obj2.main_matrix,
+    #         'degrees': 'not that method, its concatenate'}
+    # obj1.add_images(data, side=sidik, step=1)
+    # step = obj1.summary_step
+    # return obj1
+    pass
+# if second matrix smaller
+
+
+matrix1 = np.array(([1, 1, 1], 
+                  [1, 1, 1],
+                  [1, 1, 1]))
+matrix2 = np.array(([1, 1], 
+                  [1, 1],
+                  [1, 1]))
+matrix2 += 1
+zeroes = np.zeros((len(matrix2),1))
+
+def zeroing_matrix(matrix1, matrix2):
+    f = 0
+    if len(matrix2[0]) > len(matrix1[0]):
+        matrix1, matrix2 = matrix2, matrix1
+        f = 1
+    zeroes = np.zeros((len(matrix2), (len(matrix1[0]) - len(matrix2[0]))))
+    zeroed_matrix = np.append(matrix2, zeroes, axis=1)
+    if f:
+        return zeroed_matrix, matrix1
+    return matrix1, zeroed_matrix
+
+def differ_width_matrix_conc(matrix1, matrix2):
+    return np.concatenate((zeroing_matrix(matrix1, matrix2)))
+
+print(differ_width_matrix_conc(matrix2, matrix1))
