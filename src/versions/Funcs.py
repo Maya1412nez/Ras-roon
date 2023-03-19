@@ -59,7 +59,7 @@ mat = np.array([
     [0, 9, 3, 0],
     [2, 1, 0, 5]
 ])
-print(get_upleft_index(mat, 5))
+# print(get_upleft_index(mat, 5))
 
 
 def concatenate_images(image1, image0, side=None, step=0):
@@ -117,31 +117,15 @@ def image_to_obj(image):
     return obj
 
 
-def concatenate_matrixes(obj1, obj2, sidik, x=0, y=0):
-    # width, height, = obj1.image.size
-    # width1, height1 = obj2.image.size
-    # width, height = max(width, width1), max(height, height1)
-    # if sidik == 'up' or sidik == 'down': 
-    #     x, y = 0, height
-    # if sidik == 'left' or sidik == 'right':
-    #     x, y = width, 0
-    # data = {'x': x, 'y': y, 'matrix': obj2.main_matrix,
-    #         'degrees': 'not that method, its concatenate'}
-    # obj1.add_images(data, side=sidik, step=1)
-    # step = obj1.summary_step
-    # return obj1
-    pass
-# if second matrix smaller
-
-
-matrix1 = np.array(([1, 1, 1], 
-                  [1, 1, 1],
+matrix1 = np.array(([1, 0, 1],
+                  [1, 0, 1],
                   [1, 1, 1]))
-matrix2 = np.array(([1, 1], 
-                  [1, 1],
-                  [1, 1]))
+matrix2 = np.array(([1, 1],
+                  [-1, 1],
+                  [-1, 1]))
 matrix2 += 1
-zeroes = np.zeros((len(matrix2),1))
+zeroes = np.zeros((len(matrix2), 1))
+
 
 def zeroing_matrix(matrix1, matrix2):
     f = 0
@@ -154,7 +138,72 @@ def zeroing_matrix(matrix1, matrix2):
         return zeroed_matrix, matrix1
     return matrix1, zeroed_matrix
 
+
+matrix1, matrix2 = zeroing_matrix(matrix1, matrix2)
+
+
 def differ_width_matrix_conc(matrix1, matrix2):
     return np.concatenate((zeroing_matrix(matrix1, matrix2)))
 
-print(differ_width_matrix_conc(matrix2, matrix1))
+
+def concatenate_matrixes(obj1, obj2):
+    # table1, table2 = obj1.main_matrix, obj2.main_matrix
+    table1, table2 = obj1, obj2
+    table1, table2 = zeroing_matrix(table1, table2)
+    # print(type(table1))
+    width1, height1, = len(table1), len(table1[0])
+    width2 = len(table2)
+    # print('width1, width2 in concatenate_matrixes:', width1, width2)
+    overlay = False
+    step = 0
+    while not overlay and step < height1:
+        step += 1
+        summary_step = step * 2 # because its 2 rows from 2 matrixes
+        ind_of_row1 = height1 - step # down row from up matrix
+        ind_of_row2 = step - 1 # up row from down matrix
+        for x in range(width1):
+            val1 = table1[ind_of_row1][x]
+            val2 = table2[ind_of_row2][x]
+            if val1 > 0 and val2 > 0: # it seems overlaying
+                overlay = True
+                step -= 1
+                break
+
+                # start summation rows
+
+    matrix_intersection = np.array([])
+    # print('final step:', step == 0)
+    if step == 0:
+        return np.concatenate((table1, table2))
+    for i in range(step):
+        ind1 = height1 - step + i
+        ind2 = i
+        # print(11111111111, table1[ind1], table2[ind2])
+        rez_row = np.array([table1[ind1] + table2[ind2]])
+        # print('rez row', rez_row)
+        if len(matrix_intersection) == 0:
+            matrix_intersection = rez_row
+        else:
+            # print('m', matrix_intersection, 'r', rez_row)
+            matrix_intersection = np.concatenate((matrix_intersection, rez_row))
+    up_part = table1[:(height1 - step)]
+    middle_part = matrix_intersection
+    down_part = table2[step:]
+    # print(up_part)
+    # print(middle_part)
+    # print(down_part)
+
+    result_matrix = np.concatenate((up_part, middle_part, down_part))
+    return result_matrix
+
+
+
+
+print('INPUT:')
+a = (concatenate_matrixes(matrix2, matrix1))
+print("FIRST MATRIX:")
+print(matrix2)
+print("SECOND MATRIX:")
+print(matrix1)
+print('RESULT:')
+print(a)
