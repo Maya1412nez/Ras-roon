@@ -62,69 +62,45 @@ mat = np.array([
 # print(get_upleft_index(mat, 5))
 
 
-def concatenate_images(image1, image0, side=None, step=0):
+def concatenate_images(image2, image1, side=None, step=0):
     from PIL import Image
-    width, height, = image0.size
-    width1, height1 = image1.size
-    width, height = max(width, width1), max(height, height1)
+    width1, height1, = image1.size
+    width2, height2 = image2.size
+    width_max, height_max = max(width1, width2), max(height1, height2)
+    print(f'HEIGHT1 = {height1} HEIGHT2 = {height2}')
     if side == 'up':
-        new_image = Image.new('RGBA', (width, height * 2), (0, 0, 0, 0))
-        new_image.paste(image0, (0, height - step), image0)
-        new_image.paste(image1, (0, 0), image1)
-        return new_image, (0, height - step)
+        new_image = Image.new('RGBA', (width_max, height_max * 2), (0, 0, 0, 0))
+        new_image.paste(image2, (0, 0), image2)
+        new_image.paste(image1, (0, height2 - step), image1)
+        return new_image  # , (0, height - step)
     if side == 'down':
-        new_image = Image.new('RGBA', (width, height * 2), (0, 0, 0, 0))
-        new_image.paste(image0, (0, 0), image0)
-        new_image.paste(image1, (0, height - step), image1)
-        return new_image, (0, height - step)
-    if side == 'left':
-        new_image = Image.new('RGBA', (width * 2, height), (0, 0, 0, 0))
-        new_image.paste(image0, (width - step, 0), image0)
+        new_image = Image.new('RGBA', (width_max, height_max * 2), (0, 0, 0, 0))
         new_image.paste(image1, (0, 0), image1)
-        return new_image, (width - step, 0)
+        new_image.paste(image2, (0, height1 - step), image2)
+        return new_image  # , (0, height - step)
+    if side == 'left':
+        new_image = Image.new('RGBA', (width_max * 2, height_max), (0, 0, 0, 0))
+        new_image.paste(image2, (0, 0), image2)
+        new_image.paste(image1, (width2 - step, 0), image1)
+        return new_image  # , (width - step, 0)
     if side == 'right':
-        new_image = Image.new('RGBA', (width * 2, height), (0, 0, 0, 0))
-        new_image.paste(image0, (0, 0), image0)
-        new_image.paste(image1, (width - step, 0), image1)
-        return new_image, (width - step, 0)
+        new_image = Image.new('RGBA', (width_max * 2, height_max), (0, 0, 0, 0))
+        new_image.paste(image1, (0, 0), image1)
+        new_image.paste(image2, (width1 - step, 0), image2)
+        # return new_image, (width - step, 0)
+        return new_image
 
 
-# image1, image2 = Image.open('src/image/Image.png'), Image.open('src/image/dog.png')
-# concatenate_images(image1, image2, right=1)
-
-def best_concatenate_images(image_1, image_2):
-    from Funcs import concatenate_images
-    overlay = False
-    sides = ['up', 'down', 'left', 'right']
-    for side in sides:  # make best for each side
-        if side == 'up' or side == 'down':
-            side_for_matrix = 'y'
-        else:
-            side_for_matrix = 'x'
-        obj_1 = image_to_obj(image_1)
-        obj_2 = image_to_obj(image_2)
-        good_obj, step = concatenate_matrixes(
-            obj_1, obj_2, x, y, side=side_for_matrix)
-        good_image, x, y = concatenate_images(image_1, image_2, side, step)
-        good_obj.image.show
-        good_obj.save_rez()
-
-
-def image_to_obj(image):
-    from Verse1_1_1 import MainImage
-    obj = MainImage(its_image=image)
-    obj.create_matrix()
-    return obj
-
-
-matrix1 = np.array(([1, 0, 1],
-                  [1, 0, 1],
-                  [1, 1, 1]))
-matrix2 = np.array(([1, 1],
-                  [-1, 1],
-                  [-1, 1]))
-matrix2 += 1
-zeroes = np.zeros((len(matrix2), 1))
+# matrix1 = np.array(([1, 0, 1],
+#                     [1, 0, 1],
+#                     [1, 1, 1],
+#                     [1, 1, 1]))
+# matrix2 = np.array(([1, 1],
+#                     [-1, 1],
+#                     [-1, 1],
+#                     [-1, 1]))
+# matrix2 += 1
+# zeroes = np.zeros((len(matrix2), 1))
 
 
 def zeroing_matrix(matrix1, matrix2):
@@ -139,11 +115,11 @@ def zeroing_matrix(matrix1, matrix2):
     return matrix1, zeroed_matrix
 
 
-matrix1, matrix2 = zeroing_matrix(matrix1, matrix2)
+# matrix1, matrix2 = zeroing_matrix(matrix1, matrix2)
 
 
-def differ_width_matrix_conc(matrix1, matrix2):
-    return np.concatenate((zeroing_matrix(matrix1, matrix2)))
+# def differ_width_matrix_conc(matrix1, matrix2):
+#     return np.concatenate((zeroing_matrix(matrix1, matrix2)))
 
 
 def concatenate_matrixes(obj1, obj2):
@@ -151,20 +127,20 @@ def concatenate_matrixes(obj1, obj2):
     table1, table2 = obj1, obj2
     table1, table2 = zeroing_matrix(table1, table2)
     # print(type(table1))
-    width1, height1, = len(table1), len(table1[0])
-    width2 = len(table2)
+    width1, height1, = len(table1[0]), len(table1)
+    width2 = len(table2[0])
     # print('width1, width2 in concatenate_matrixes:', width1, width2)
     overlay = False
     step = 0
     while not overlay and step < height1:
         step += 1
-        summary_step = step * 2 # because its 2 rows from 2 matrixes
-        ind_of_row1 = height1 - step # down row from up matrix
-        ind_of_row2 = step - 1 # up row from down matrix
+        ind_of_row1 = height1 - step  # down row from up matrix
+        ind_of_row2 = step - 1  # up row from down matrix
         for x in range(width1):
+            # print(ind_of_row1, x)
             val1 = table1[ind_of_row1][x]
             val2 = table2[ind_of_row2][x]
-            if val1 > 0 and val2 > 0: # it seems overlaying
+            if val1 > 0 and val2 > 0:  # it seems overlaying
                 overlay = True
                 step -= 1
                 break
@@ -173,8 +149,9 @@ def concatenate_matrixes(obj1, obj2):
 
     matrix_intersection = np.array([])
     # print('final step:', step == 0)
+    summary_step = step * 2  # because its 2 rows from 2 matrixes
     if step == 0:
-        return np.concatenate((table1, table2))
+        return np.concatenate((table1, table2)), 0
     for i in range(step):
         ind1 = height1 - step + i
         ind2 = i
@@ -185,7 +162,8 @@ def concatenate_matrixes(obj1, obj2):
             matrix_intersection = rez_row
         else:
             # print('m', matrix_intersection, 'r', rez_row)
-            matrix_intersection = np.concatenate((matrix_intersection, rez_row))
+            matrix_intersection = np.concatenate(
+                (matrix_intersection, rez_row))
     up_part = table1[:(height1 - step)]
     middle_part = matrix_intersection
     down_part = table2[step:]
@@ -194,16 +172,26 @@ def concatenate_matrixes(obj1, obj2):
     # print(down_part)
 
     result_matrix = np.concatenate((up_part, middle_part, down_part))
-    return result_matrix
+    print(f'STEP = {step}, SUMMARY STEP = {summary_step}')
+
+    file = open('src/rezs/parents/maiddle_part.txt', 'w', encoding='utf-8')
+
+    for row in middle_part:
+        np.set_printoptions(linewidth=2000)
+        file.write(f'[{str(row)}],')
+        # print(row)
+        file.write('\n')
+    file.write(f'STEP = {step}')
+
+    return result_matrix, step
 
 
-
-
-print('INPUT:')
-a = (concatenate_matrixes(matrix2, matrix1))
-print("FIRST MATRIX:")
-print(matrix2)
-print("SECOND MATRIX:")
-print(matrix1)
-print('RESULT:')
-print(a)
+# print('INPUT:')
+# print(type(matrix2))
+# a = (concatenate_matrixes(matrix2, matrix1))
+# print("FIRST MATRIX:")
+# print(matrix2)
+# print("SECOND MATRIX:")
+# print(matrix1)
+# print('RESULT:')
+# print(a)
