@@ -46,7 +46,7 @@ def fight(list_of_objects):
     print('---------------END_OF_POPULATION---------------')
     return winner_list
 
-
+# pyuic5 src/versions/wertex.ui -o src/versions/name.py
 def local_fight(list_of_objects, i, j):
     if j != None:
         first_figter, second_fighter = list_of_objects[i], list_of_objects[j]

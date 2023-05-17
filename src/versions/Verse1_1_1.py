@@ -284,3 +284,6 @@ class MainImage(OverlayImage):
 #     datas = OVER_IMAGE.get_data()
 #     MAIN_IMAGE.add_images(datas)
 #     MAIN_IMAGE.save_rez()
+# python -m PyQt5.uic.pyuic -x /src/versions/untitled.ui -o /src/versions/goood.py
+
+# pyuic5 /src/versions/untitled.ui -o /src/versions/name.py

@@ -1,0 +1,58 @@
+# def f(x):
+#     return x * 2
+
+# print(f(3))
+
+# print((lambda x: x * 2)(3))
+# print(list(str(12)))
+
+# # a = [15, 36, 19, 76, 100]
+# # b = sorted(a, key=(lambda x: (str(x)[-1], x)))
+# # print(b)
+
+# a = [
+#     'Рита, 5',
+#     "Вася, 2",
+#     "Петя, 5",
+#     "Катя, 3"
+# ]
+
+# c = sorted(a, key=(lambda x: (x.split()[-1], x.split()[0])))
+# print(c)
+
+
+# m = []
+# N = 0
+# for i in range(int(input())):
+#     new_stroka = input()
+#     m.append(new_stroka)
+#     if len(new_stroka) < 3: 
+#         N += 1
+
+# n_m = sorted(m, key=(lambda x: (-len(x), int(str(x)[::-1]))))
+# print(' '.join(n_m[:-N]))
+
+print(64 * 64 * (8) / (1024 * 8))
+'''
+
+'''
+
+print(0.375 * 2**16 / 1024 / 1024)
+
+
+def perevod(number):
+    zel, drob = number.split(',')
+    zel_part = bin(zel)[1:]
+    drob_part = 0
+    while True:
+        drob *= 2
+
+
+
+for s in range(0, 1000, 2):
+    n = 120
+    s_old = s
+    while s > 0:
+        s = s // 6
+        n = n - 6
+    print(n)
